@@ -1,4 +1,5 @@
 HTSL for ChatTriggers is no longer receiving updates. For a newer version, please visit https://github.com/redstone-llc/HTSLReborn
+
 This fork aims to fix some of the bugs with HTSL as well as add some new features.
 
 Installation instructions:
@@ -15,3 +16,4 @@ Thanks to Housing Editor for making this possible
 To see ingame commands do /htsl or /htsl help
 
 Support Discord Server: discord.gg/bptauV2BAA
+
