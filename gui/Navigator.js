@@ -22,7 +22,7 @@ slotIdField.setAccessible(true);
 
 const arrow = new Image(
   javax.imageio.ImageIO.read(
-    new java.io.File("./config/ChatTriggers/modules/HTSL/assets/red-arrow.png")
+    new java.io.File("./config/ChatTriggers/modules/BHTSL/assets/red-arrow.png")
   )
 );
 let drawArrow = false;
