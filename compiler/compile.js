@@ -23,15 +23,15 @@ export function compile(fileName, dissallowedFiles, nested) {
 	try {
 		if (!dissallowedFiles) dissallowedFiles = [];
 		let importText;
-		if (FileLib.exists(`./config/ChatTriggers/modules/HTSL/imports/${fileName}.htsl`)) {
-			importText = FileLib.read(`./config/ChatTriggers/modules/HTSL/imports/${fileName}.htsl`);
+		if (FileLib.exists(`./config/ChatTriggers/modules/BHTSL/imports/${fileName}.htsl`)) {
+			importText = FileLib.read(`./config/ChatTriggers/modules/BHTSL/imports/${fileName}.htsl`);
 		} else {
-			return ChatLib.chat(`&3[HTSL] &cCouldn't find the file "&f${fileName}&c", please make sure it exists!`);
+			return ChatLib.chat(`&3[BHTSL] &cCouldn't find the file "&f${fileName}&c", please make sure it exists!`);
 		}
 		dissallowedFiles.push(fileName);
 		let noFiles = dissallowedFiles;
 		shortcuts = [];
-		if (!nested) ChatLib.chat("&3[HTSL] &fCompiling . . .");
+		if (!nested) ChatLib.chat("&3[BHTSL] &fCompiling . . .");
 		let actionobj = preProcess(importText.split("\n"), noFiles);
 		if (typeof actionobj == "string") return ChatLib.chat(actionobj);
 		// processor
@@ -42,7 +42,7 @@ export function compile(fileName, dissallowedFiles, nested) {
 			for (let i = 0; i < actionsList.length; i++) {
 				let args = actionsList[i].line.includes("\n") ? getMultiline(actionsList[i].line) : getArgs(actionsList[i].line.trim());
 				let currentLine = actionsList[i].trueLine;
-				if (typeof args == "boolean" && !args) { return ChatLib.chat(`&3[HTSL] &cSomething went wrong with expression evaluation on &eline ${currentLine}`); }
+				if (typeof args == "boolean" && !args) { return ChatLib.chat(`&3[BHTSL] &cSomething went wrong with expression evaluation on &eline ${currentLine}`); }
 				let keyword = args.shift();
 				if (syntaxes.actions[keyword]) {
 					let syntax = syntaxes.actions[keyword];
@@ -50,15 +50,15 @@ export function compile(fileName, dissallowedFiles, nested) {
 					if (typeof comp == "string") {
 						let line = comp.match(/\{line-?(\d+)?\}/);
 						if (line[1]) currentLine = currentLine + Number(line[1]);
-						return ChatLib.chat(`&3[HTSL] &c${comp.replace(/{line-?(\d+)?}/g, currentLine)}`);
+						return ChatLib.chat(`&3[BHTSL] &c${comp.replace(/{line-?(\d+)?}/g, currentLine)}`);
 					}
 					if (comp) {
 						newActionList.push(comp);
 					} else {
-						return ChatLib.chat(`&3[HTSL] &cUnknown action &e${keyword}&c on &eline ${currentLine}`);
+						return ChatLib.chat(`&3[BHTSL] &cUnknown action &e${keyword}&c on &eline ${currentLine}`);
 					}
 				} else {
-					return ChatLib.chat(`&3[HTSL] &cUnknown action &e${keyword}&c on &eline ${currentLine}`);
+					return ChatLib.chat(`&3[BHTSL] &cUnknown action &e${keyword}&c on &eline ${currentLine}`);
 				}
 				multiLineOffset = 0;
 			}
@@ -70,7 +70,7 @@ export function compile(fileName, dissallowedFiles, nested) {
 			if (!loadAction(actionobj)) return false;
 		} else return actionobj.map(n => { n.compiled = true; return n });
 	} catch (error) {
-		ChatLib.chat(`&3[HTSL] &eEncountered an unknown error, please seek support about the following error:`);
+		ChatLib.chat(`&3[BHTSL] &eEncountered an unknown error, please seek support about the following error:`);
 		ChatLib.chat(error);
 		console.error(error);
 	}
@@ -459,8 +459,8 @@ function componentFunc(args, syntax, menu) {
 			if (typeof args[j] == "object") {
 				args[j].type = "clickSlot";
 			} else {
-				if (!FileLib.exists("HTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`)) return `Unknown item &e${args[j]}&c on &eline {line}`;
-				args[j] = JSON.parse(FileLib.read("HTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`));
+				if (!FileLib.exists("BHTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`)) return `Unknown item &e${args[j]}&c on &eline {line}`;
+				args[j] = JSON.parse(FileLib.read("BHTSL", `imports/${path}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${args[j]}.json`));
 				args[j].type = "customItem";
 			}
 		}
@@ -567,7 +567,7 @@ export function preProcess(importActions, dissallowedFiles) {
 		if (importActions[i].startsWith("/*")) { multilineComment = true; continue; }
 		if (importActions[i].endsWith("*/")) {
 			if (multilineComment) { multilineComment = false; continue; }
-			else return ChatLib.chat(`&3[HTSL] &cBroken multiline comment on line &e${i + 1}`);
+			else return ChatLib.chat(`&3[BHTSL] &cBroken multiline comment on line &e${i + 1}`);
 		}
 		if (multilineComment) continue;
 		if (importActions[i].endsWith("{")) depth++;
@@ -642,13 +642,13 @@ export function preProcess(importActions, dissallowedFiles) {
 				if (gotoArgs[j].match(/^"(?:.*)"$/)) gotoArgs[j] = gotoArgs[j].substring(1, gotoArgs[j].length - 1);
 			}
 			if (gotoArgs.length == 5 && gotoArgs[3] == "as") {
-				if (dissallowedFiles.includes(gotoArgs[4])) return `&3[HTSL] &cNested file calls detected`;
+				if (dissallowedFiles.includes(gotoArgs[4])) return `&3[BHTSL] &cNested file calls detected`;
 				let fileCall = compile(gotoArgs[4], dissallowedFiles, true);
 				fileCall[0].context = gotoArgs[1].toUpperCase();
 				fileCall[0].contextTarget = { name: gotoArgs[2].match(/^"(?:.*)"$/) };
 				actionobj.push(...fileCall);
 			} else if (gotoArgs.length == 6 && ["region", "gui", "custommenu", "npc"].includes(gotoArgs[2]) && gotoArgs[4] == "as") {
-				if (dissallowedFiles.includes(gotoArgs[4])) return `&3[HTSL] &cNested file calls detected`;
+				if (dissallowedFiles.includes(gotoArgs[4])) return `&3[BHTSL] &cNested file calls detected`;
 				let fileCall = compile(gotoArgs[4], dissallowedFiles, true);
 				fileCall[0].context = gotoArgs[1].toUpperCase();
 				fileCall[0].contextTarget = { name: gotoArgs[2], trigger: gotoArgs[4] };
@@ -660,8 +660,8 @@ export function preProcess(importActions, dissallowedFiles) {
 
 		if (importActions[i].startsWith("define")) {
 			let shortcutName = importActions[i].split(/ +/)[1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-			if (syntaxes[shortcutName] || ["goto", "//", "/*", "*/", "loop"].includes(shortcutName)) return ChatLib.chat(`&3[HTSL] &cInvalid shortcut name &e${importActions[i].split(/ +/)[1]}`);
-			if (shortcuts.find(shortcut => shortcut.name == shortcutName)) return ChatLib.chat(`&3[HTSL] &cCannot have two shortcuts of the same name!`);
+			if (syntaxes[shortcutName] || ["goto", "//", "/*", "*/", "loop"].includes(shortcutName)) return ChatLib.chat(`&3[BHTSL] &cInvalid shortcut name &e${importActions[i].split(/ +/)[1]}`);
+			if (shortcuts.find(shortcut => shortcut.name == shortcutName)) return ChatLib.chat(`&3[BHTSL] &cCannot have two shortcuts of the same name!`);
 			shortcuts.push({
 				name: shortcutName,
 				value: importActions[i].substring(8 + importActions[i].split(/ +/)[1].length)
@@ -677,7 +677,7 @@ export function preProcess(importActions, dissallowedFiles) {
 		contextTarget: currentContext.contextTarget,
 		actionList: trueActions
 	});
-	if (multilineComment) return ChatLib.chat(`&3[HTSL] &cUnclosed multiline comment!`);
-	if (depth > 0) return ChatLib.chat(`&3[HTSL] &cUnclosed multiline action!`);
+	if (multilineComment) return ChatLib.chat(`&3[BHTSL] &cUnclosed multiline comment!`);
+	if (depth > 0) return ChatLib.chat(`&3[BHTSL] &cUnclosed multiline action!`);
 	return actionobj;
 }
