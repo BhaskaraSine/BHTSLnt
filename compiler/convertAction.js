@@ -20,7 +20,7 @@ export function convertHE(actionId, filename) {
         method: 'GET',
     }).then(response => {
         const json = response.data;
-        FileLib.write(`./config/ChatTriggers/modules/HTSL/imports/${filename}.htsl`, convertData(json.actionData, json.post?.title, json.author?.name));
+        FileLib.write(`./config/ChatTriggers/modules/BHTSL/imports/${filename}.htsl`, convertData(json.actionData, json.post?.title, json.author?.name));
     }).catch(error => {
         if (!error.response) return ChatLib.chat('&cError: ' + error);
         const response = error.response;
@@ -505,4 +505,5 @@ function readConditions(condition) {
     }
 
     return condition;
+
 }
