@@ -1,7 +1,7 @@
 // config.js
 import { @Vigilant @SliderProperty @SwitchProperty @NumberProperty @TextProperty @ButtonProperty @SliderProperty @CheckboxProperty } from 'Vigilance';
 
-@Vigilant("HTSL", `HTSL`, {
+@Vigilant("BHTSL", `BHTSL`, {
 	getCategoryComparator: () => (a, b) => {
 		const categories = ["General", "Importing/Exporting", "Import Menu"];
 
