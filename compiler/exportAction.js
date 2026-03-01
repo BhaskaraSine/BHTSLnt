@@ -24,9 +24,9 @@ export default (fileName) => {
                 contextTarget: {},
                 actions: actionobjs
             }], fileName);
-            FileLib.write("HTSL", `imports/${fileName}.htsl`, script.script, true);
+            FileLib.write("BHTSL", `imports/${fileName}.htsl`, script.script, true);
             for (let i = 0; i < script.items.length; i++) {
-                FileLib.write("HTSL", `imports/${fileName.substring(0, fileName.lastIndexOf("\\") + 1)}${script.items[i].name}.json`, script.items[i].string, true);
+                FileLib.write("BHTSL", `imports/${fileName.substring(0, fileName.lastIndexOf("\\") + 1)}${script.items[i].name}.json`, script.items[i].string, true);
             }
         }
     });
