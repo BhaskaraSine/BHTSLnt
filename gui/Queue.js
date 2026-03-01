@@ -79,7 +79,7 @@ register("tick", () => {
             return Client.currentGui.close();
         case "goto":
             Navigator.goto = true;
-            ChatLib.chat(`&3[HTSL] &fPlease open action container &e${operation.name}`);
+            ChatLib.chat(`&3[BHTSL] &fPlease open action container &e${operation.name}`);
             Navigator.isReady = false;
             return;
         case "wait":
@@ -136,7 +136,7 @@ function doneLoading() {
             } left in queue.`
         );
     } else {
-        ChatLib.chat(`&3[HTSL] &fImported successfully!`);
+        ChatLib.chat(`&3[BHTSL] &fImported successfully!`);
     }
 }
 
