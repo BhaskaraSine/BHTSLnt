@@ -158,7 +158,7 @@ register('guiRender', (x, y) => {
 							item.draw(input.getX(), topBound + 4 + 20 * (i - page * linesPerPage), 1, 200);
 						}
 					} else Renderer.drawImage(type, input.getX() - 2, topBound + 3 + 20 * (i - page * linesPerPage), 20, 20);
-					Renderer.drawString(filteredFiles[i].replace(subDir, "").replace("\\", ""), input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
+					Renderer.drawString(filteredFiles[i].replace(subDir, "").replace("\\", "").replace(/(.*)\.(.*)/, "$1&8.$2"), input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
 				} else {
 					if (Settings.itemIcons && filteredFiles[i].endsWith(".json")) {
 						let item
