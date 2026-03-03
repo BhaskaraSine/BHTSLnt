@@ -1,3 +1,9 @@
+if (FileLib.exists("HTSL", "./metadata.json")) {
+    ChatLib.chat("&3[BHTSL] &cError while loading");
+    ChatLib.chat("&3[BHTSL] &eBHTSL is incompatible with HTSL! Please remove HTSL from your modules folder.")
+    throw new Error("BHTSL is incompatible with HTSL! Please remove HTSL from your modules folder.");
+}
+
 /// <reference types="../CTAutocomplete" />
 
 import { getSubDir } from './gui/LoadActionGUI';
@@ -182,3 +188,4 @@ function getMatchedFileName(path, filePath) {
     return null;
 
 }
+
