@@ -219,13 +219,14 @@ register('guiKey', (char, keyCode, gui, event) => {
 		if (input.getText() != "Enter File Name") filteredFiles = files.filter(n => n.toLowerCase().includes(input.getText().toLowerCase()))
 		else filteredFiles = files;
 		// fileInputUpdate()
-		if (keyCode !== 1) { // keycode for escape key
+		if (keyCode !== 1 && inputEnabled) { // keycode for escape key
 			cancel(event);
 		}
 	}
 });
 
 let lastClick = 0;
+let inputEnabled = false;
 
 register('guiMouseClick', (x, y, mouseButton) => {
 	if (!Player.getContainer()) return;
@@ -243,8 +244,10 @@ register('guiMouseClick', (x, y, mouseButton) => {
 			input.setCursorPosition(0);
 		}
 		input.setEnabled(true);
+		inputEnabled = true;
 	} else {
 		input.setEnabled(false);
+		inputEnabled = false;
 	}
 
 	if (isButtonHovered(refreshFiles, x, y)) { readFiles(); World.playSound('random.click', 0.5, 1) }
