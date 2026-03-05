@@ -263,7 +263,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
             if (selected.endsWith('.htsl')) {
                 if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
                 if (compile(selected.substring(0, selected.length - 5).replace(/\\/g, "/"))) World.playSound('random.click', 0.5, 1);
-            } else if (selected.endsWith('\\')) {
+            } else if (selected.endsWith("/")) {
                 subDir = selected;
                 readFiles();
                 World.playSound('random.click', 0.5, 1);
@@ -319,10 +319,10 @@ function readFiles() {
         const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir.replace(/\\+/g, "/")}`;
         let rawFiles = readDir(searchPath, isGlobalSearching);
 
-        files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("\\"));
+        files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("/"));
 
         files.sort((a, b) => {
-            let isDirA = a.endsWith('\\'), isDirB = b.endsWith('\\');
+            let isDirA = a.endsWith('/'), isDirB = b.endsWith('/');
             if (isDirA && !isDirB) return -1;
             if (!isDirA && isDirB) return 1;
             return clean(a).localeCompare(clean(b));
@@ -341,7 +341,7 @@ function readDir(path, walk) {
         let name = file.getName();
         if (file.isDirectory()) {
             if (walk) readDir(path + name + "/", true).forEach(f => fileNames.push(name + "/" + f));
-            else fileNames.push(name + "\\");
+            else fileNames.push(name + "/");
         } else fileNames.push(name);
     });
     return fileNames;
