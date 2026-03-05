@@ -150,6 +150,13 @@ class Settings {
 	})
 	debounce = 10;
 
+	@SwitchProperty({
+		name: "Global Search",
+		description: "Search all subdirectories at once instead of just the current directory",
+		category: "Import Menu",
+		subcategory: "Import Menu"
+	})
+	globalSearch = false;
 	
 	constructor() {
 		this.initialize(this);
