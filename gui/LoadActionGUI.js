@@ -46,7 +46,7 @@ let hoveringIndex;
 let renderItemIcons = [];
 let isGlobalSearching = false;
 
-register('guiRender', (x, y) => {
+register('postGuiRender', (x, y) => {
     if (!Player.getContainer() || !isInItemGui() || isImporting()) return;
 
     let chestWidth = xSizeField.get(Client.currentGui.get());
