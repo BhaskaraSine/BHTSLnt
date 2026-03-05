@@ -4,8 +4,6 @@ if (FileLib.exists("HTSL", "./metadata.json")) {
     throw new Error("BHTSL is incompatible with HTSL! Please remove HTSL from your modules folder.");
 }
 
-/// <reference types="../CTAutocomplete" />
-
 import { getSubDir } from './gui/LoadActionGUI';
 import Config from "./utils/config";
 import codeWindow from './gui/codeWindow';

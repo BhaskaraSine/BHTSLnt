@@ -1,4 +1,3 @@
-/// <reference types="../../CTAutocomplete" />
 import Settings from '../utils/config';
 import utilInputAnvil from '../utils/inputAnvil';
 import loadItem from '../utils/loadItemstack';
