@@ -164,7 +164,7 @@ function renderActionGUI(x, y) {
 
             if (subDir != "") {
                 backDir.render(x, y);
-                Renderer.drawString("&7/" + subDir.replace(/\\/g, "/"), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true);
+                Renderer.drawString("&7" + subDir.replace(/\\/g, "/"), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true);
             }
             if ((page + 1) * linesPerPage < filteredFiles.length) forwardPage.render(x, y);
             if (page > 0) backwardPage.render(x, y);
