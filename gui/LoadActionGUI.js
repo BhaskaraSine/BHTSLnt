@@ -29,8 +29,6 @@ const nh_itemIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./con
 const nh_folderIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_folder.png`)));
 const trashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin_closed.png`)));
 const openTrashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin.png`)));
-const menuClick = new Sound({ source: "click.ogg", category: "master" });
-const trashSound = new Sound({ source: "paper.ogg", category: "master" });
 
 const input = new Input(0, 0, 0, 18);
 input.setEnabled(false);
@@ -95,8 +93,7 @@ register('postGuiRender', (x, y) => {
                 
                 if (isHoveringRow) {
                     if (hoveringIndex != i) {
-                        menuClick.rewind();
-                        menuClick.play();
+						World.playSound('random.wood_click', 0.05, 2);
                         hoveringIndex = i;
                     }
                     hovered = true;
@@ -249,8 +246,8 @@ register('guiMouseClick', (x, y, mouseButton) => {
         if (filteredFiles[fileIdx]) {
             let selected = filteredFiles[fileIdx];
             if (selected.includes(".") && x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 24) {
-                trashSound.rewind();
-                trashSound.play();
+                World.playSound('random.fizz', 0.1, 1);
+				World.playSound('liquid.lavapop', 0.5, 0.5);
                 FileLib.delete("BHTSL", `imports/${selected.replace(/\\/g, "/")}`);
                 readFiles();
                 return;
@@ -264,8 +261,8 @@ register('guiMouseClick', (x, y, mouseButton) => {
                 World.playSound('random.click', 0.5, 1);
             } else {
                 if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) {
-                    World.playSound('mob.villager.no', 0.5, 1);
-                    return ChatLib.chat(`&3[HTSL] &cMust be in creative mode to import an item!`);
+                    World.playSound('mob.villager.no', 1, 1);
+                    return ChatLib.chat(`&3[BHTSL] &cMust be in creative mode to import an item!`);
                 }
                 let content = FileLib.read('BHTSL', `/imports/${selected.replace(/\\/g, "/")}`);
                 if (content) {
