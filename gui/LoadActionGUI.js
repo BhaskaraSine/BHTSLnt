@@ -236,7 +236,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
         page++;
         if (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54)) {
             page += 9;
-            if (page * linesPerPage >= filteredFiles.length) page = (filteredFiles.length / linesPerPage) - 1;
+            if (page * linesPerPage >= filteredFiles.length) page = Math.ceil(filteredFiles.length / linesPerPage) - 1;
         }
         World.playSound('random.click', 0.5, 1);
     }
