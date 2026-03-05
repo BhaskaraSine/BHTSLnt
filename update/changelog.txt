@@ -4,3 +4,5 @@ Patch 2.0.0:
 - Action GUI now has an option for global searching
 - Action GUI now truncates file names
 - Action GUI sounds have been improved
+- Action GUI now shows current page number
+- Action GUI forward and backward directory buttons now support shift clicking to move 10 pages
