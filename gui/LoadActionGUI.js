@@ -420,13 +420,21 @@ function readFiles() {
 	renderItemIcons = [];
 	if (Settings.toggleFileExplorer && !show) return;
 	try {
+		const clean = (str) => str.replace(/[&§][0-9a-fk-or]/gi, "").replace(/^\s+/, "").toLowerCase();
+		
 		files = readDir(`./config/ChatTriggers/modules/BHTSL/imports/${subDir.replace(/\\+/g, "/")}`, false).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || !n.includes("."));
-		files.sort().sort((a, b) => {
+		files.sort((a, b) => {
+			let cleanA = clean(a);
+			let cleanB = clean(b);
+
 			let isDirA = a.endsWith('\\');
 			let isDirB = b.endsWith('\\');
 
 			if (isDirA && !isDirB) return -1;
 			if (!isDirA && isDirB) return 1;
+
+			if (cleanA < cleanB) return -1;
+			if (cleanA > cleanB) return 1;
 
 			let extA = a.split('.').pop();
 			let extB = b.split('.').pop();
