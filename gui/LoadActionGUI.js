@@ -21,55 +21,21 @@ const toggleShow = new Button(0, 0, 0, 20, '⇩');
 let show = false;
 
 // load assets
-const htslIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/htsl.png`)
-	)
-);
-const itemIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/item.png`)
-	)
-);
-const folderIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/folder.png`)
-	)
-);
-const nh_htslIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_htsl.png`)
-	)
-);
-const nh_itemIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_item.png`)
-	)
-);
-const nh_folderIcon = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_folder.png`)
-	)
-);
-const trashBin = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin_closed.png`)
-	)
-);
-const openTrashBin = new Image(
-	javax.imageio.ImageIO.read(
-		new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin.png`)
-	)
-);
+const htslIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/htsl.png`)));
+const itemIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/item.png`)));
+const folderIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/folder.png`)));
+const nh_htslIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_htsl.png`)));
+const nh_itemIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_item.png`)));
+const nh_folderIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_folder.png`)));
+const trashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin_closed.png`)));
+const openTrashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin.png`)));
 const menuClick = new Sound({ source: "click.ogg", category: "master" });
 const trashSound = new Sound({ source: "paper.ogg", category: "master" });
 
 const input = new Input(0, 0, 0, 18);
 input.setEnabled(false);
 input.setText('Enter File Name');
-input.mcObject.func_146203_f(1000); // set max length
-
-// const exportButton = new Button(0, 0, 0, 20, 'Export HTSL');
+input.mcObject.func_146203_f(1000); 
 
 let files = [];
 let filteredFiles = [];
@@ -78,149 +44,155 @@ let page = 0;
 let linesPerPage;
 let hoveringIndex;
 let renderItemIcons = [];
+let isGlobalSearching = false;
 
 register('guiRender', (x, y) => {
-	if (!Player.getContainer()) return;
-	if (!isInItemGui()) return;
-	if (isImporting()) return;
+    if (!Player.getContainer() || !isInItemGui() || isImporting()) return;
 
-	// placements
-	// let chestGuiTop = guiTopField.get(Client.currentGui.get());
-	let chestWidth = xSizeField.get(Client.currentGui.get());
-	let chestX = Renderer.screen.getWidth() / 2 - chestWidth / 2;
-	let topBound = input.getY() + 30;
-	let xBound = input.getX() + input.getWidth();
+    let chestWidth = xSizeField.get(Client.currentGui.get());
+    let chestX = Renderer.screen.getWidth() / 2 - chestWidth / 2;
+    let topBound = input.getY() + 30;
+    let xBound = input.getX() + input.getWidth();
 
-	input.setY(Renderer.screen.getHeight() / 7 - 20);
-	input.setWidth(chestX * 6 / 7);
-	input.setX(chestX / 2 - input.getWidth() / 2);
+    input.setY(Renderer.screen.getHeight() / 7 - 20);
+    input.setWidth(chestX * 6 / 7);
+    input.setX(chestX / 2 - input.getWidth() / 2);
 
-	importButton.setY(input.getY() - 25);
-	exportButton.setY(input.getY() - 25);
-	importButton.setX(input.getX());
-	importButton.setWidth(input.getWidth() / 2);
-	exportButton.setX(input.getX() + input.getWidth() / 2);
-	exportButton.setWidth(importButton.getWidth());
-	try {
-		if ((Settings.toggleFileExplorer && show) || !Settings.toggleFileExplorer) {
-			refreshFiles.setWidth(chestX - xBound - 10 < 10 ? 10 : chestX - xBound - 10);
-			refreshFiles.setX((chestX - xBound) / 2 + xBound - refreshFiles.getWidth() / 2);
-			refreshFiles.setY(input.getY());
-			backDir.setWidth(chestX - xBound - 10 < 10 ? 10 : chestX - xBound - 10);
-			backDir.setX((chestX - xBound) / 2 + xBound - refreshFiles.getWidth() / 2);
-			backDir.setY(input.getY() - 25);
+    importButton.setY(input.getY() - 25);
+    exportButton.setY(input.getY() - 25);
+    importButton.setX(input.getX());
+    importButton.setWidth(input.getWidth() / 2);
+    exportButton.setX(input.getX() + input.getWidth() / 2);
+    exportButton.setWidth(importButton.getWidth());
 
-			forwardPage.setY(Renderer.screen.getHeight() / 7 * 6 + 2);
-			forwardPage.setX(input.getWidth() + input.getX() - 5);
-			backwardPage.setY(Renderer.screen.getHeight() / 7 * 6 + 2);
-			backwardPage.setX(input.getX() - 5);
+    try {
+        if ((Settings.toggleFileExplorer && show) || !Settings.toggleFileExplorer) {
+            refreshFiles.setWidth(Math.max(10, chestX - xBound - 10));
+            refreshFiles.setX((chestX - xBound) / 2 + xBound - refreshFiles.getWidth() / 2);
+            refreshFiles.setY(input.getY());
+            backDir.setWidth(Math.max(10, chestX - xBound - 10));
+            backDir.setX((chestX - xBound) / 2 + xBound - refreshFiles.getWidth() / 2);
+            backDir.setY(input.getY() - 25);
 
-			// rendering
+            forwardPage.setY(Renderer.screen.getHeight() / 7 * 6 + 2);
+            forwardPage.setX(input.getWidth() + input.getX() - 5);
+            backwardPage.setY(Renderer.screen.getHeight() / 7 * 6 + 2);
+            backwardPage.setX(input.getX() - 5);
 
-			Renderer.drawRect(Renderer.color(30, 30, 30, 200), input.getX() - 5, topBound, input.getWidth() + 10, Renderer.screen.getHeight() / 7 * 6 - topBound);
+            Renderer.drawRect(Renderer.color(30, 30, 30, 200), input.getX() - 5, topBound, input.getWidth() + 10, Renderer.screen.getHeight() / 7 * 6 - topBound);
 
-			linesPerPage = Math.floor((Renderer.screen.getHeight() / 7 * 6 - topBound - 9) / 20);
-			let hovered = false;
-			for (let i = page * linesPerPage; i < filteredFiles.length && i < (page + 1) * linesPerPage; i++) {
-				let type;
-				if (filteredFiles[i].endsWith(".htsl")) {
-					type = Settings.altIcons ? nh_htslIcon : htslIcon;
-				} else if (filteredFiles[i].endsWith(".json")) {
-					type = Settings.altIcons ? nh_itemIcon : itemIcon;
-				} else if (!filteredFiles[i].includes(".")) {
-					type = Settings.altIcons ? nh_folderIcon : folderIcon;
-				}
-				if (y < topBound + 20 + 20 * (i - page * linesPerPage) && y > topBound + 20 * (i - page * linesPerPage) && x < xBound && x > input.getX()) {
-					if (hoveringIndex != i) {
-						menuClick.rewind();
-						menuClick.play();
-						hoveringIndex = i;
+            linesPerPage = Math.floor((Renderer.screen.getHeight() / 7 * 6 - topBound - 9) / 20);
+            let hovered = false;
+
+            for (let i = page * linesPerPage; i < filteredFiles.length && i < (page + 1) * linesPerPage; i++) {
+                let currentFile = filteredFiles[i];
+                let type;
+                if (currentFile.endsWith(".htsl")) type = Settings.altIcons ? nh_htslIcon : htslIcon;
+                else if (currentFile.endsWith(".json")) type = Settings.altIcons ? nh_itemIcon : itemIcon;
+                else type = Settings.altIcons ? nh_folderIcon : folderIcon;
+
+                let isHoveringRow = (y < topBound + 20 + 20 * (i - page * linesPerPage) && y > topBound + 20 * (i - page * linesPerPage) && x < xBound && x > input.getX());
+                
+                if (isHoveringRow) {
+                    if (hoveringIndex != i) {
+                        menuClick.rewind();
+                        menuClick.play();
+                        hoveringIndex = i;
+                    }
+                    hovered = true;
+                    Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
+                    
+                    if (currentFile.includes(".")) {
+                        let isHoveringTrash = (x < xBound - 8 && x > xBound - 24);
+                        Renderer.drawImage(isHoveringTrash ? openTrashBin : trashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
+                    }
+                }
+
+                let item = null;
+                let pathKey = currentFile.replace(/\\/g, "/");
+                if (Settings.itemIcons && currentFile.endsWith(".json")) {
+                    if (renderItemIcons[pathKey]) item = renderItemIcons[pathKey];
+                    else {
+                        let content = FileLib.read("BHTSL", `imports/${pathKey}`);
+                        if (content) {
+                            try {
+                                item = getItemFromNBT(JSON.parse(content).item);
+                                renderItemIcons[pathKey] = item;
+                            } catch(e) {}
+                        }
+                    }
+                }
+
+                let drawX = input.getX() + (isHoveringRow ? -2 : 0);
+                let drawY = topBound + (isHoveringRow ? 3 : (Settings.altIcons ? 6 : 5)) + 20 * (i - page * linesPerPage);
+                let size = isHoveringRow ? 20 : (Settings.altIcons ? 14 : 16);
+
+                if (item) item.draw(input.getX(), topBound + 4 + 20 * (i - page * linesPerPage), 1, 200);
+                else Renderer.drawImage(type, drawX, drawY, size, size);
+
+				let displayName = isGlobalSearching ? currentFile : currentFile.replace(subDir, "");
+				let maxTextWidth = input.getWidth() - 35;
+
+				let dotIndex = displayName.lastIndexOf(".");
+				let baseName = dotIndex !== -1 ? displayName.substring(0, dotIndex) : displayName;
+				let extension = dotIndex !== -1 ? "&8." + displayName.substring(dotIndex + 1) : "";
+
+				let currentWidth = Renderer.getStringWidth(displayName);
+
+				if (currentWidth > maxTextWidth) {
+					while (Renderer.getStringWidth(baseName + "..." + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
+						baseName = baseName.substring(0, baseName.length - 1);
 					}
-					hovered = true;
-					Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
-					if (filteredFiles[i].includes(".")) {
-						if (x < xBound - 8 && x > xBound - 24) {
-							Renderer.drawImage(openTrashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
-						} else {
-							Renderer.drawImage(trashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
-						}
-					}
-					if (Settings.itemIcons && filteredFiles[i].endsWith(".json")) {
-						let item
-						if (renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]]) item = renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]];
-						else {
-							item = getItemFromNBT(JSON.parse(FileLib.read("BHTSL", `imports/${subDir.replace("\\", "/")}${filteredFiles[i]}`)).item);
-							renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]] = item;
-						}
-						if (!item) {
-							Renderer.drawImage(type, input.getX() - 2, topBound + 3 + 20 * (i - page * linesPerPage), 20, 20);
-						} else {
-							item.draw(input.getX(), topBound + 4 + 20 * (i - page * linesPerPage), 1, 200);
-						}
-					} else Renderer.drawImage(type, input.getX() - 2, topBound + 3 + 20 * (i - page * linesPerPage), 20, 20);
-					Renderer.drawString(filteredFiles[i].replace(subDir, "").replace("\\", "").replace(/(.*)\.(.*)/, "$1&8.$2"), input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
-				} else {
-					if (Settings.itemIcons && filteredFiles[i].endsWith(".json")) {
-						let item
-						if (renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]]) item = renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]];
-						else {
-							item = getItemFromNBT(JSON.parse(FileLib.read("BHTSL", `imports/${subDir.replace("\\", "/")}${filteredFiles[i]}`)).item);
-							renderItemIcons[subDir.replace("\\", "/") + filteredFiles[i]] = item;
-						}
-						if (!item) {
-							Renderer.drawImage(type, input.getX(), topBound + (Settings.altIcons ? 6 : 5) + 20 * (i - page * linesPerPage), Settings.altIcons ? 14 : 16, Settings.altIcons ? 14 : 16);
-						} else {
-							item.draw(input.getX(), topBound + 4 + 20 * (i - page * linesPerPage), 1, 200);
-						}
-					} else Renderer.drawImage(type, input.getX(), topBound + (Settings.altIcons ? 6 : 5) + 20 * (i - page * linesPerPage), Settings.altIcons ? 14 : 16, Settings.altIcons ? 14 : 16);
-					Renderer.drawString(filteredFiles[i].replace(subDir, "").replace("\\", "").replace(/(.*)\.(.*)/, "$1&8.$2"), input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
+					baseName += "...";
 				}
-				// Renderer.drawImage(openTrashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
-				if (input.getText() != "Enter File Name" && input.getText() != "") {
-					Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(filteredFiles[i].substring(0, filteredFiles[i].toLowerCase().indexOf(input.getText().toLowerCase()))), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(input.getText()), 17)
-				}
-			}
-			if (!hovered) hoveringIndex = -1;
-			if (filteredFiles.length == 0) {
-				Renderer.drawString("Nothing is here...", input.getX() + 10, topBound + 9, true);
-			}
 
-			if (subDir != "") {
-				backDir.render(x, y);
-				Renderer.drawString("&7/" + subDir.replace(/\\/g, "/"), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true)
-			};
-			if ((page + 1) * linesPerPage < filteredFiles.length) {
-				forwardPage.render(x, y);
-			}
-			if (page > 0) {
-				backwardPage.render(x, y);
-			}
-			refreshFiles.render(x, y);
-		}
-	} catch (e) { console.log(e) }
-	if (Settings.toggleFileExplorer) {
-		toggleShow.setX(input.getX() - 15);
-		toggleShow.setWidth(10);
-		toggleShow.setY(input.getY());
-		toggleShow.render(x, y);
-	}
-	input.render();
-	importButton.render(x, y);
-	exportButton.render(x, y);
+				let renderedName = baseName + extension;
+				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
+
+				if (input.getText() != "Enter File Name" && input.getText() != "" && currentWidth <= maxTextWidth) {
+					let searchIdx = displayName.toLowerCase().indexOf(input.getText().toLowerCase());
+					if (searchIdx !== -1) {
+						Renderer.drawRect(
+							Renderer.color(252, 229, 15, 100), 
+							input.getX() + 21 + Renderer.getStringWidth(displayName.substring(0, searchIdx)), 
+							topBound + 5 + 20 * (i - page * linesPerPage), 
+							Renderer.getStringWidth(input.getText()), 
+							17
+						);
+					}
+				}
+            }
+            if (!hovered) hoveringIndex = -1;
+            if (filteredFiles.length == 0) Renderer.drawString("Nothing is here...", input.getX() + 10, topBound + 9, true);
+
+            if (subDir != "") {
+                backDir.render(x, y);
+                Renderer.drawString("&7/" + subDir.replace(/\\/g, "/"), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true);
+            }
+            if ((page + 1) * linesPerPage < filteredFiles.length) forwardPage.render(x, y);
+            if (page > 0) backwardPage.render(x, y);
+            refreshFiles.render(x, y);
+        }
+    } catch (e) { console.log(e) }
+
+    if (Settings.toggleFileExplorer) {
+        toggleShow.setX(input.getX() - 15);
+        toggleShow.setWidth(10);
+        toggleShow.setY(input.getY());
+        toggleShow.render(x, y);
+    }
+    input.render();
+    importButton.render(x, y);
+    exportButton.render(x, y);
 });
 
 register('guiKey', (char, keyCode, gui, event) => {
     if (!Player.getContainer() || !isInItemGui() || !inputEnabled) return;
-
     input.mcObject.func_146195_b(true);
     if (input.mcObject.func_146206_l()) {
         input.mcObject.func_146201_a(char, keyCode);
-        
         readFiles(); 
-
-        if (keyCode !== 1) { // keycode for escape key
-            cancel(event);
-        }
+        if (keyCode !== 1) cancel(event);
     }
 });
 
@@ -228,187 +200,102 @@ let lastClick = 0;
 let inputEnabled = false;
 
 register('guiMouseClick', (x, y, mouseButton) => {
-	if (!Player.getContainer()) return;
-	if (!isInItemGui()) return;
+    if (!Player.getContainer() || !isInItemGui() || isImporting()) return;
+    if (Settings.debounce > Date.now() - lastClick) return;
+    lastClick = Date.now();
 
-	if (isImporting()) return;
+    input.mcObject.func_146192_a(x, y, mouseButton);
+    if (x > input.getX() && x < input.getX() + input.getWidth() && y > input.getY() && y < input.getY() + input.getHeight()) {
+        if (input.getText() === 'Enter File Name') {
+            input.setText('');
+            input.setCursorPosition(0);
+        }
+        input.setEnabled(true);
+        inputEnabled = true;
+    } else {
+        input.setEnabled(false);
+        inputEnabled = false;
+    }
 
-	if (Settings.debounce > Date.now() - lastClick) return;
-	lastClick = Date.now();
+    if (isButtonHovered(refreshFiles, x, y)) { readFiles(); World.playSound('random.click', 0.5, 1); }
+    if (subDir != "" && isButtonHovered(backDir, x, y)) {
+        let tempDir = subDir.endsWith("\\") ? subDir.slice(0, -1) : subDir;
+        let lastIdx = tempDir.lastIndexOf("\\");
+        subDir = lastIdx !== -1 ? tempDir.slice(0, lastIdx + 1) : "";
+        readFiles();
+        World.playSound('random.click', 0.5, 1);
+    }
+    if ((page + 1) * linesPerPage < filteredFiles.length && isButtonHovered(forwardPage, x, y)) {
+        page++;
+        World.playSound('random.click', 0.5, 1);
+    }
+    if (page > 0 && isButtonHovered(backwardPage, x, y)) {
+        page--;
+        World.playSound('random.click', 0.5, 1);
+    }
+    if (Settings.toggleFileExplorer && isButtonHovered(toggleShow, x, y)) {
+        show = !show;
+        World.playSound('random.click', 0.5, 1);
+        toggleShow.setText(show ? '⇧' : '⇩');
+        readFiles();
+    }
 
-	input.mcObject.func_146192_a(x, y, mouseButton);
-	if (x > input.getX() && x < input.getX() + input.getWidth() && y > input.getY() && y < input.getY() + input.getHeight()) {
-		if (input.getText() === 'Enter File Name') {
-			input.setText('')
-			input.setCursorPosition(0);
-		}
-		input.setEnabled(true);
-		inputEnabled = true;
-	} else {
-		input.setEnabled(false);
-		inputEnabled = false;
-	}
+    handleInputClick(importButton, compile, x, y);
+    handleInputClick(exportButton, exportAction, x, y);
 
-	if (isButtonHovered(refreshFiles, x, y)) { readFiles(); World.playSound('random.click', 0.5, 1) }
-	if (subDir != "" && isButtonHovered(backDir, x, y)) {
-		if (subDir.endsWith("\\")) {
-			subDir = subDir.slice(0, -1);
-		}
-		let lastBackslashIndex = subDir.lastIndexOf("\\");
-		if (lastBackslashIndex !== -1) {
-			subDir = subDir.slice(0, lastBackslashIndex + 1); // Keep the backslash at the end
-		} else {
-			subDir = ""; // Set to empty string if no more backslashes
-		}
-
-		readFiles();
-		World.playSound('random.click', 0.5, 1);
-	}
-	if ((page + 1) * linesPerPage < files.length && isButtonHovered(forwardPage, x, y)) {
-		page++;
-		World.playSound('random.click', 0.5, 1);
-	}
-	if (page > 0 && isButtonHovered(backwardPage, x, y)) {
-		page--;
-		World.playSound('random.click', 0.5, 1);
-	}
-	if (Settings.toggleFileExplorer && isButtonHovered(toggleShow, x, y)) {
-		show = !show;
-		World.playSound('random.click', 0.5, 1);
-		toggleShow.setText(show ? '⇧' : '⇩');
-		readFiles();
-	}
-
-	handleInputClick(importButton, compile, x, y);
-	handleInputClick(exportButton, exportAction, x, y);
-	// handleInputClick(exportButton, () => { ChatLib.chat("&3[BHTSL] &eBecause of the recent update, exporting is currently disabled."); }, x, y);
-
-	let index = -1;
-	if (x >= input.getX() && x <= input.getX() + input.getWidth()) {
-		index = Math.floor((y - (input.getY() + 30)) / 20);
-		if (index < 0 || index >= linesPerPage || index >= filteredFiles.length) {
-			index = -1; // Ensure the index is within the bounds of the array
-		} else {
-			index += page * linesPerPage;
-		}
-	}
-	if (index >= 0) {
-		if (!filteredFiles[index]) return;
-		if (filteredFiles[index].includes(".")) {
-			if (x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 24) {
-				trashSound.rewind();
-				trashSound.play();
-				FileLib.delete("BHTSL", `imports/${subDir.replaceAll("\\", "/")}${filteredFiles[index]}`);
-				files = [];
-				filteredFiles = [];
-				readFiles();
-				return;
-			}
-		}
-		if (filteredFiles[index].endsWith('.htsl')) {
-			if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
-			if (compile(subDir.replace(/\\/g, "/") + filteredFiles[index].substring(0, filteredFiles[index].length - 5))) World.playSound('random.click', 0.5, 1);
-			if (Settings.saveFiles) {
-				input.setText(filteredFiles[index].substring(0, filteredFiles[index].length - 5));
-				filteredFiles = files.filter(n => n.toLowerCase().includes(input.getText().toLowerCase()));
-			}
-		} else if (!filteredFiles[index].includes(".")) {
-			subDir += filteredFiles[index];
-			files = [];
-			filteredFiles = [];
-			readFiles();
-			World.playSound('random.click', 0.5, 1);
-		} else {
-			if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) {
-				World.playSound('mob.villager.no', 0.5, 1);
-				return ChatLib.chat(`&3[HTSL] &cMust be in creative mode to import an item!`);
-			}
-			let nbt = JSON.parse(FileLib.read('BHTSL', `/imports/${subDir.replaceAll("\\", "/") + filteredFiles[index]}`)).item;
-			let item = getItemFromNBT(nbt);
-			let slot = Player.getInventory().getItems().indexOf(null);
-			if (slot < 9) slot += 36;
-			loadItemstack(item.getItemStack(), slot);
-			World.playSound('random.click', 0.5, 1);
-		}
-	}
+    let index = Math.floor((y - (input.getY() + 30)) / 20);
+    if (x >= input.getX() && x <= input.getX() + input.getWidth() && index >= 0 && index < linesPerPage) {
+        let fileIdx = index + (page * linesPerPage);
+        if (filteredFiles[fileIdx]) {
+            let selected = filteredFiles[fileIdx];
+            if (selected.includes(".") && x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 24) {
+                trashSound.rewind();
+                trashSound.play();
+                FileLib.delete("BHTSL", `imports/${selected.replace(/\\/g, "/")}`);
+                readFiles();
+                return;
+            }
+            if (selected.endsWith('.htsl')) {
+                if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
+                if (compile(selected.substring(0, selected.length - 5).replace(/\\/g, "/"))) World.playSound('random.click', 0.5, 1);
+            } else if (selected.endsWith('\\')) {
+                subDir = selected;
+                readFiles();
+                World.playSound('random.click', 0.5, 1);
+            } else {
+                if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) {
+                    World.playSound('mob.villager.no', 0.5, 1);
+                    return ChatLib.chat(`&3[HTSL] &cMust be in creative mode to import an item!`);
+                }
+                let content = FileLib.read('BHTSL', `/imports/${selected.replace(/\\/g, "/")}`);
+                if (content) {
+                    let item = getItemFromNBT(JSON.parse(content).item);
+                    let slot = Player.getInventory().getItems().indexOf(null);
+                    if (slot < 9 && slot !== -1) slot += 36;
+                    if (slot !== -1) loadItemstack(item.getItemStack(), slot);
+                    World.playSound('random.click', 0.5, 1);
+                }
+            }
+        }
+    }
 });
 
 function handleInputClick(button, action, x, y) {
-	if (isButtonHovered(button, x, y)) {
-		World.playSound('random.click', 0.5, 1)
-
-		if (!isInActionGui()) return;
-		
-		if (input.getText() === "Enter File Name" || input.getText() === "") {
-			input.setText('default');
-		}
-
-		if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
-		action(subDir + input.getText());
-
-		input.setSelectionEnd(0);
-		input.setCursorPosition(0);
-		input.setLineScrollOffset(0);
-		input.setIsFocused(false);
-		if (!Settings.saveFile || input.getText() == "default") input.setText('Enter File Name');
-	}
+    if (isButtonHovered(button, x, y)) {
+        World.playSound('random.click', 0.5, 1);
+        if (!isInActionGui()) return;
+        let fileName = (input.getText() === "Enter File Name" || input.getText() === "") ? "default" : input.getText();
+        if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
+        action(subDir + fileName);
+        input.setSelectionEnd(0);
+        input.setCursorPosition(0);
+        input.setIsFocused(false);
+        if (!Settings.saveFile || fileName == "default") input.setText('Enter File Name');
+    }
 }
 
 function isButtonHovered(button, x, y) {
-	return x > button.getX() &&
-		x < button.getX() + button.getWidth() &&
-		y > button.getY() &&
-		y < button.getY() + button.getHeight();
-}
-
-register('guiClosed', (gui) => {
-	if (gui.class.getName() !== 'net.minecraft.client.gui.inventory.GuiChest') return;
-
-	const lowerChestField = gui.class.getDeclaredField('field_147015_w');
-	lowerChestField.setAccessible(true);
-	const lowerChest = lowerChestField.get(gui);
-
-	const inventoryTitleField = net.minecraft.inventory.InventoryBasic.class.getDeclaredField('field_70483_a');
-	inventoryTitleField.setAccessible(true);
-	const inventoryTitle = inventoryTitleField.get(lowerChest);
-
-	if (inventoryTitle !== 'Edit Actions') return;
-
-	if (importButton.getText() === 'Error') {
-		importButton.setEnabled(true);
-		importButton.setText('Import HTSL');
-	}
-});
-
-register('guiOpened', (gui) => {
-	if (!Player.getContainer()) return;
-	// for some reason this event triggers before the gui actually loads?? so we have to wait
-	setTimeout(() => {
-		if (!isInItemGui()) return wasInItemGui = false;
-		if (wasInItemGui) return;
-		if (!wasInItemGui && isInItemGui()) wasInItemGui = true;
-
-		if (!Settings.saveDirectory) subDir = "";
-		readFiles();
-	}, 50);
-});
-
-let wasInItemGui = false;
-function isInItemGui() {
-	if (Client.currentGui.getClassName() === "GuiContainerCreative") return true;
-	if (Client.currentGui.getClassName() === "GuiEditSign") return false;
-	if (Player.getContainer().getClassName() !== "ContainerChest") return false;
-	if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
-	if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) return false;
-	return true;
-}
-
-function isInActionGui() {
-	const containerName = Player.getContainer().getName();
-	if (Client.currentGui.getClassName() === "GuiEditSign") return false;
-	if (Player.getContainer().getClassName() !== "ContainerChest") return false;
-	if (containerName.match(/Edit Actions|Actions: /)) return true;
-	return false;
+    return x > button.getX() && x < button.getX() + button.getWidth() && y > button.getY() && y < button.getY() + button.getHeight();
 }
 
 function readFiles() {
@@ -422,55 +309,51 @@ function readFiles() {
         const clean = (str) => str.replace(/[&§][0-9a-fk-or]/gi, "").replace(/^\s+/, "").toLowerCase();
         const searchText = input.getText();
         const isSearching = searchText !== "Enter File Name" && searchText !== "";
-
-        const shouldWalk = Settings.globalSearch && isSearching;
+        isGlobalSearching = Settings.globalSearch && isSearching;
         
-        const basePath = shouldWalk ? "" : subDir;
-        const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${basePath.replace(/\\+/g, "/")}`;
+        const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir.replace(/\\+/g, "/")}`;
+        let rawFiles = readDir(searchPath, isGlobalSearching);
 
-        files = readDir(searchPath, shouldWalk).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("\\"));
+        files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("\\"));
 
         files.sort((a, b) => {
-            let isDirA = a.endsWith('\\');
-            let isDirB = b.endsWith('\\');
+            let isDirA = a.endsWith('\\'), isDirB = b.endsWith('\\');
             if (isDirA && !isDirB) return -1;
             if (!isDirA && isDirB) return 1;
             return clean(a).localeCompare(clean(b));
         });
 
-        if (isSearching) {
-            filteredFiles = files.filter(n => n.toLowerCase().includes(searchText.toLowerCase()));
-        } else {
-            filteredFiles = files;
-        }
-    } catch (e) {
-        console.error(e);
-        ChatLib.chat(`&3[BHTSL] &cSomething went wrong reading your imports...`);
-    }
+        filteredFiles = isSearching ? files.filter(n => n.toLowerCase().includes(searchText.toLowerCase())) : files;
+    } catch (e) { console.error(e); }
 }
 
 function readDir(path, walk) {
-    let files = new java.io.File(path).listFiles();
+    let folder = new java.io.File(path);
+    let files = folder.listFiles();
     let fileNames = [];
     if (!files) return [];
-
     files.forEach(file => {
         let name = file.getName();
         if (file.isDirectory()) {
-            if (walk) {
-                readDir(path + name + "/", true).forEach(newFile => {
-                    fileNames.push(name + "/" + newFile); 
-                });
-            } else {
-                fileNames.push(name + "\\");
-            }
-        } else {
-            fileNames.push(name);
-        }
+            if (walk) readDir(path + name + "/", true).forEach(f => fileNames.push(name + "/" + f));
+            else fileNames.push(name + "\\");
+        } else fileNames.push(name);
     });
     return fileNames;
 }
 
-export function getSubDir() {
-    return subDir;
+function isInItemGui() {
+    let name = Client.currentGui.getClassName();
+    if (name === "GuiContainerCreative") return true;
+    if (name === "GuiEditSign") return false;
+    if (Player.getContainer().getClassName() !== "ContainerChest") return false;
+    if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
+    return Player.asPlayerMP().player.field_71075_bZ.field_75098_d !== false;
 }
+
+function isInActionGui() {
+    return Player.getContainer().getClassName() === "ContainerChest" && Player.getContainer().getName().match(/Edit Actions|Actions: /);
+}
+
+register('guiOpened', () => setTimeout(readFiles, 50));
+export function getSubDir() { return subDir; }
