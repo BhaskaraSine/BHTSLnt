@@ -1,4 +1,4 @@
-Patch 2.0.0:
+Patch v2.0.0:
 
 - Action GUI will show in menus where items can be imported, even if scripts cannot (option)
 - Action GUI now has an option for global searching (option)
