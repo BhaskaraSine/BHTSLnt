@@ -99,7 +99,7 @@ function renderActionGUI(x, y) {
                     hovered = true;
                     Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
                     
-                    if (currentFile.includes(".")) {
+                    if (currentFile.endsWith(".htsl") || currentFile.endsWith(".json")) {
                         let isHoveringTrash = (x < xBound - 8 && x > xBound - 24);
                         Renderer.drawImage(isHoveringTrash ? openTrashBin : trashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
                     }
@@ -131,8 +131,12 @@ function renderActionGUI(x, y) {
 				let maxTextWidth = input.getWidth() - 35;
 
 				let dotIndex = displayName.lastIndexOf(".");
-				let baseName = dotIndex !== -1 ? displayName.substring(0, dotIndex) : displayName;
-				let extension = dotIndex !== -1 ? "&8." + displayName.substring(dotIndex + 1) : "";
+                if (!currentFile.endsWith(".htsl") && !currentFile.endsWith(".json")) {
+                    dotIndex = -1;
+                    displayName = displayName.slice(0, -1);
+                }
+                let baseName = dotIndex !== -1 ? displayName.substring(0, dotIndex) : displayName;
+                let extension = dotIndex !== -1 ? "&8." + displayName.substring(dotIndex + 1) : "";
 
 				let currentWidth = Renderer.getStringWidth(displayName);
 
@@ -143,7 +147,8 @@ function renderActionGUI(x, y) {
 					baseName += "...";
 				}
 
-				let renderedName = baseName + extension;
+                let renderedName = baseName + extension;
+				
 				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
 
 				if (input.getText() != "Enter File Name" && input.getText() != "" && currentWidth <= maxTextWidth) {
@@ -164,7 +169,7 @@ function renderActionGUI(x, y) {
 
             if (subDir != "") {
                 backDir.render(x, y);
-                Renderer.drawString("&7" + subDir.replace(/\\/g, "/"), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true);
+                Renderer.drawString("&7" + subDir.replace(/\\/g, "/").slice(0, -1), chestX / 2 - Renderer.getStringWidth("/" + subDir.replace(/\\/g, "/")) / 2, topBound - 10, true);
             }
 
             if (linesPerPage < filteredFiles.length) Renderer.drawString("&7" + page, input.getWidth() / 2 + input.getX(), input.getY() + 393, true);
