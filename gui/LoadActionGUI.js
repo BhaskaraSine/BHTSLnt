@@ -43,6 +43,13 @@ let linesPerPage;
 let hoveringIndex;
 let renderItemIcons = [];
 let isGlobalSearching = false;
+let lastIsGlobalSearching = false;
+let cachedFiles = null;
+let cacheTimestamp = 0;
+let CACHE_DURATION = 5000; // Cache for 5 seconds
+let searchTimeout = null;
+let lastSearchPath = null;
+let lastRawFiles = null;
 
 function renderActionGUI(x, y) {
     if (!Player.getContainer() || !(Settings.guiAvaliableEverywhere ? isInItemGui() : isInActionGui()) || isImporting()) return;
@@ -141,20 +148,20 @@ function renderActionGUI(x, y) {
 				let currentWidth = Renderer.getStringWidth(displayName);
 
 				if (currentWidth > maxTextWidth) {
-					while (Renderer.getStringWidth(baseName + "..." + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
-						baseName = baseName.substring(0, baseName.length - 1);
+					while (Renderer.getStringWidth("..." + baseName + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
+						baseName = baseName.substring(1);
 					}
-					baseName += "...";
+					baseName = "&8...&7" + baseName;
 				}
 
                 let renderedName = baseName + extension;
 				
 				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
 
-				if (input.getText() != "Enter File Name" && input.getText() != "" && currentWidth <= maxTextWidth) {
-					let searchIdx = displayName.toLowerCase().indexOf(input.getText().toLowerCase());
+				if (input.getText() != "Enter File Name" && input.getText() != "" && Renderer.getStringWidth(renderedName) <= maxTextWidth) {
+					let searchIdx = renderedName.toLowerCase().indexOf(input.getText().toLowerCase());
 					if (searchIdx !== -1) {
-						Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(displayName.substring(0, searchIdx)), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(input.getText()), 17);
+						Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(renderedName.substring(0, searchIdx)), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(input.getText()), 17);
 					}
 				}
             }
@@ -163,7 +170,22 @@ function renderActionGUI(x, y) {
 
             if (subDir != "") {
                 backDir.render(x, y);
-                Renderer.drawString("&7" + subDir.replaceAll("/", "&8/&7"), Math.ceil(chestX / 2 - Renderer.getStringWidth("/" + subDir) / 2), topBound - 9, false);
+                let displayDir = "&7" + subDir.replaceAll("/", "&8/&7");
+                let dirWidth = Renderer.getStringWidth(displayDir);
+                let maxDirWidth = input.getWidth() + 10;
+                
+                // Truncate from the left by character
+                if (dirWidth > maxDirWidth) {
+                    let truncatedDir = subDir;
+                    
+                    while (Renderer.getStringWidth("&8...&7" + truncatedDir.replaceAll("/", "&8/&7")) > maxDirWidth && truncatedDir.length > 1) {
+                        truncatedDir = truncatedDir.substring(1);
+                    }
+                    
+                    displayDir = "&8...&7" + truncatedDir.replaceAll("/", "&8/&7");
+                }
+                
+                Renderer.drawString(displayDir, Math.ceil(chestX / 2 - Renderer.getStringWidth(displayDir) / 2), topBound - 9, false);
             }
 
             if (linesPerPage < filteredFiles.length) Renderer.drawString("&7" + (page + 1) + "&8/&7" + Math.ceil(filteredFiles.length / linesPerPage), input.getWidth() / 2 + input.getX(), input.getY() + 393, true);
@@ -197,7 +219,7 @@ register('guiKey', (char, keyCode, gui, event) => {
     input.mcObject.func_146195_b(true);
     if (input.mcObject.func_146206_l()) {
         input.mcObject.func_146201_a(char, keyCode);
-        readFiles(); 
+        debouncedReadFiles(); 
         if (keyCode !== 1) cancel(event);
     }
 });
@@ -223,11 +245,12 @@ register('guiMouseClick', (x, y, mouseButton) => {
         inputEnabled = false;
     }
 
-    if (isButtonHovered(refreshFiles, x, y)) { readFiles(); World.playSound('random.click', 0.5, 1); }
+    if (isButtonHovered(refreshFiles, x, y)) { cachedFiles = null; lastSearchPath = null; readFiles(); World.playSound('random.click', 0.5, 1); }
     if (subDir != "" && isButtonHovered(backDir, x, y)) {
         let tempDir = subDir.endsWith("/") ? subDir.slice(0, -1) : subDir;
         let lastIdx = tempDir.lastIndexOf("/");
         subDir = lastIdx !== -1 ? tempDir.slice(0, lastIdx + 1) : "";
+        lastSearchPath = null;
         readFiles();
         World.playSound('random.click', 0.5, 1);
     }
@@ -266,6 +289,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
                 World.playSound('random.fizz', 0.1, 1);
 				World.playSound('liquid.lavapop', 0.5, 0.5);
                 FileLib.delete("BHTSL", `imports/${selected}`);
+                cachedFiles = null;
                 readFiles();
                 return;
             }
@@ -275,6 +299,8 @@ register('guiMouseClick', (x, y, mouseButton) => {
                 if (compile(selected.substring(0, selected.length - 5))) World.playSound('random.click', 0.5, 1);
             } else if (selected.endsWith("/")) {
                 subDir = selected;
+                lastSearchPath = null;
+                cachedFiles = null;
                 readFiles();
                 World.playSound('random.click', 0.5, 1);
             } else {
@@ -315,8 +341,6 @@ function isButtonHovered(button, x, y) {
 
 function readFiles() {
     page = 0;
-    files = [];
-    filteredFiles = [];
     renderItemIcons = [];
     if (Settings.toggleFileExplorer && !show) return;
 
@@ -327,19 +351,51 @@ function readFiles() {
         isGlobalSearching = Settings.globalSearch && isSearching;
         
         const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir}`;
-        let rawFiles = readDir(searchPath, isGlobalSearching);
+        
+        if (lastSearchPath !== searchPath || lastIsGlobalSearching !== isGlobalSearching) {
+            files = [];
+            // Use cached files
+            let rawFiles;
+            const now = Date.now();
+            if (isGlobalSearching && cachedFiles && (now - cacheTimestamp) < CACHE_DURATION) {
+                rawFiles = cachedFiles;
+            } else {
+                rawFiles = readDir(searchPath, isGlobalSearching);
+                if (isGlobalSearching) {
+                    cachedFiles = rawFiles;
+                    cacheTimestamp = now;
+                }
+            }
+            
+            lastRawFiles = rawFiles;
+            lastSearchPath = searchPath;
+            lastIsGlobalSearching = isGlobalSearching;
 
-        files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("/"));
+            files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("/"));
 
-        files.sort((a, b) => {
-            let isDirA = a.endsWith('/'), isDirB = b.endsWith('/');
-            if (isDirA && !isDirB) return -1;
-            if (!isDirA && isDirB) return 1;
-            return clean(a).localeCompare(clean(b));
-        });
+            files.sort((a, b) => {
+                let isDirA = a.endsWith('/'), isDirB = b.endsWith('/');
+                if (isDirA && !isDirB) return -1;
+                if (!isDirA && isDirB) return 1;
+                return clean(a).localeCompare(clean(b));
+            });
+        }
 
-        filteredFiles = isSearching ? files.filter(n => n.toLowerCase().includes(searchText.toLowerCase())) : files;
+        // Only update filtered results
+        const newFilteredFiles = isSearching ? files.filter(n => n.toLowerCase().includes(searchText.toLowerCase())) : files;
+        filteredFiles = newFilteredFiles;
     } catch (e) { console.error(e); }
+}
+
+function debouncedReadFiles() {
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    
+    // Set timeout to call readFiles after 150ms of inactivity
+    searchTimeout = setTimeout(() => {
+        readFiles();
+    }, 150);
 }
 
 function readDir(path, walk) {
@@ -352,7 +408,12 @@ function readDir(path, walk) {
         if (file.isDirectory()) {
             if (walk) readDir(path + name + "/", true).forEach(f => fileNames.push(name + "/" + f));
             else fileNames.push(name + "/");
-        } else fileNames.push(name);
+        } else {
+            let lowerName = name.toLowerCase();
+            if (lowerName.endsWith(".htsl") || lowerName.endsWith(".json")) {
+                fileNames.push(name);
+            }
+        }
     });
     return fileNames;
 }
