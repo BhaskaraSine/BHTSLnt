@@ -133,7 +133,7 @@ function renderActionGUI(x, y) {
 				let dotIndex = displayName.lastIndexOf(".");
                 if (!currentFile.endsWith(".htsl") && !currentFile.endsWith(".json")) {
                     dotIndex = -1;
-                    displayName = displayName.slice(0, -1);
+                    displayName = displayName.slice(0, -1) + "&8/&r";
                 }
                 let baseName = dotIndex !== -1 ? displayName.substring(0, dotIndex) : displayName;
                 let extension = dotIndex !== -1 ? "&8." + displayName.substring(dotIndex + 1) : "";
@@ -147,7 +147,7 @@ function renderActionGUI(x, y) {
 					baseName += "...";
 				}
 
-                let renderedName = baseName.replaceAll("/", "&8/&r") + extension;
+                let renderedName = baseName + extension;
 				
 				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
 
@@ -163,7 +163,7 @@ function renderActionGUI(x, y) {
 
             if (subDir != "") {
                 backDir.render(x, y);
-                Renderer.drawString("&7" + subDir.replaceAll("/", "&8/&7").slice(0, -5), chestX / 2 - Renderer.getStringWidth("/" + subDir) / 2, topBound - 10, true);
+                Renderer.drawString("&7" + subDir.replaceAll("/", "&8/&7"), Math.ceil(chestX / 2 - Renderer.getStringWidth("/" + subDir) / 2), topBound - 9, false);
             }
 
             if (linesPerPage < filteredFiles.length) Renderer.drawString("&7" + (page + 1) + "&8/&7" + Math.ceil(filteredFiles.length / linesPerPage), input.getWidth() / 2 + input.getX(), input.getY() + 393, true);
@@ -270,6 +270,7 @@ register('guiMouseClick', (x, y, mouseButton) => {
                 return;
             }
             if (selected.endsWith('.htsl')) {
+                if (!isInActionGui()) return;
                 if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) ChatLib.command("gmc");
                 if (compile(selected.substring(0, selected.length - 5))) World.playSound('random.click', 0.5, 1);
             } else if (selected.endsWith("/")) {
@@ -325,7 +326,7 @@ function readFiles() {
         const isSearching = searchText !== "Enter File Name" && searchText !== "";
         isGlobalSearching = Settings.globalSearch && isSearching;
         
-        const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir.replace(/\\+/g, "/")}`;
+        const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir}`;
         let rawFiles = readDir(searchPath, isGlobalSearching);
 
         files = rawFiles.map(name => isGlobalSearching ? name : subDir + name).filter(n => n.endsWith(".htsl") || n.endsWith(".json") || n.endsWith("/"));
@@ -365,7 +366,6 @@ function isInItemGui() {
 	return true;
 }
 
-let wasInActionGui = false;
 function isInActionGui() {
 	if (Client.currentGui.getClassName() === "GuiEditSign") return false;
 	if (Player.getContainer().getClassName() !== "ContainerChest") return false;
@@ -374,16 +374,7 @@ function isInActionGui() {
 }
 
 register('guiOpened', () => {
-	if (!Player.getContainer()) return;
-	// for some reason this event triggers before the gui actually loads?? so we have to wait
-	setTimeout(() => {
-		if (!isInActionGui()) return wasInActionGui = false;
-		if (wasInActionGui) return;
-		if (!wasInActionGui && isInActionGui()) wasInActionGui = true;
-
-		if (!Settings.saveDirectory) subDir = "";
-		readFiles();
-	}, 50);
+    if (Settings.refreshFileExplorerAutomatically) readFiles();
 });
 
 export function getSubDir() { return subDir; }

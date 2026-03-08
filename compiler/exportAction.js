@@ -26,7 +26,7 @@ export default (fileName) => {
             }], fileName);
             FileLib.write("BHTSL", `imports/${fileName}.htsl`, script.script, true);
             for (let i = 0; i < script.items.length; i++) {
-                FileLib.write("BHTSL", `imports/${fileName.substring(0, fileName.lastIndexOf("\\") + 1)}${script.items[i].name}.json`, script.items[i].string, true);
+                FileLib.write("BHTSL", `imports/${fileName.substring(0, fileName.lastIndexOf("/") + 1)}${script.items[i].name}.json`, script.items[i].string, true);
             }
         }
     });
@@ -153,7 +153,11 @@ function processPage(items, actionList, menuList, condition) {
                         forceOperation({ type: "export_item", func: (item) => {
                             actionobj[property] = item;
                         }});
-                        forceOperation({ type: "click", slot: menu[property].slot });
+                        if (condition) {
+                            forceOperation({ type: "click", slot: menu[property].slot + 1 });
+                        } else {
+                            forceOperation({ type: "click", slot: menu[property].slot });
+                        }
                         break;
                     case "location":
                         if (value === "House Spawn Location") actionobj[property] = "house_spawn";

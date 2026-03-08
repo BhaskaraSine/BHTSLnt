@@ -45,7 +45,7 @@ let exportName = "";
 export function convertJSON(json, name) {
     let script = [];
     items = [];
-    exportName = name.substring(name.lastIndexOf("\\") + 1);
+    exportName = name.substring(name.lastIndexOf("/") + 1);
     for (let context in json) {
         if (json[context].context == "DEFAULT") {
         } else {
@@ -149,11 +149,11 @@ function convertComponent(obj, syntax, menu, condition) {
             return;
         } else if (menu[propertyName].type == "item" && obj[propertyName] != null) {
             items.push({ name: `${Settings.itemPrefix.length > 1 ? "/" + Settings.itemPrefix + "/" : ""}${exportName}_item${items.length + 1}`, string: obj[propertyName] });
-            action = action.replace(property, `${exportName}_item${items.length}`);
+            action = action.replace(property, `"${exportName}_item${items.length}"`);
             return;
         } else if (obj[propertyName] != null) {
             obj[propertyName] = String(obj[propertyName]).replaceAll(/([^$])("|\\)([^^])/g, "$1\\$2$3");
-            action = action.replace(property, hasUncontainedSpace(String(obj[propertyName])) ? `"${obj[propertyName]}"` : obj[propertyName]).replaceAll("§", "&");
+            action = action.replace(property, hasUncontainedSpace(String(obj[propertyName])) ? `${obj[propertyName]}` : obj[propertyName]).replaceAll("§", "&");
         } else action = action.replace(property, "null");
     });
     return action;
@@ -163,7 +163,7 @@ function hasUncontainedSpace(str) {
     let inQuote = false, inPercent = false;
     for (let i = 0; i < str.length; i++) {
         // Only toggle inQuote if the quote is not escaped
-        if (str[i] === '"' && !inPercent && (i === 0 || str[i - 1] !== '\\')) {
+        if (str[i] === '"' && !inPercent && (i === 0 || str[i - 1] !== '/')) {
             inQuote = !inQuote;
         } else if (str[i] === '%' && !inQuote) {
             inPercent = !inPercent;

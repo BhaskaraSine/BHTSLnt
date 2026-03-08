@@ -27,8 +27,8 @@ let load = register("worldLoad", () => {
         }).then(response => {
             const latestVersion = response.data.version;
             const currentVersion = JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version;
+            if (Settings.loadMessage) ChatLib.chat(`&3[BHTSL] &fLoaded successfully!`);
             if (versionCompare(currentVersion, latestVersion)) {
-                if (Settings.loadMessage) ChatLib.chat(`&3[BHTSL] &fLoaded successfully!`);
                 return;
             }
             ChatLib.chat(new Message(new TextComponent("&3[BHTSL] &fNew BHTSL version available!").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases")));

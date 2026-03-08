@@ -1,4 +1,3 @@
-// config.js
 import { @Vigilant @SliderProperty @SwitchProperty @NumberProperty @TextProperty @ButtonProperty @SliderProperty @CheckboxProperty } from 'Vigilance';
 
 @Vigilant("BHTSL", `BHTSL`, {
@@ -11,14 +10,6 @@ import { @Vigilant @SliderProperty @SwitchProperty @NumberProperty @TextProperty
 class Settings {
 
 	// General
-	
-	@SwitchProperty({
-		name: "Save Import Directories",
-		description: 'Will keep the folder of your import inbetween imports so you don\'t have to navigate to the same directory multiple times',
-		category: "General",
-		subcategory: "General",
-	})
-	saveDirectory = true;
 
 	@SwitchProperty({
 		name: "Save Import File Name",
@@ -149,6 +140,14 @@ class Settings {
 		max: 50
 	})
 	debounce = 10;
+
+	@SwitchProperty({
+		name: "Refresh File Explorer Automatically",
+		description: "Refresh the file explorer whenever the GUI is opened, without having to press the refresh button",
+		category: "Import Menu",
+		subcategory: "Import Menu"
+	})
+	refreshFileExplorerAutomatically = true;
 
 	@SwitchProperty({
 		name: "GUI Avaliable Everywhere",
