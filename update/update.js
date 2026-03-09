@@ -1,52 +1,81 @@
-import { request as axios } from "axios";
+import request from "requestv2";
 import Settings from "../utils/config";
 
-function versionCompare(myVersion, minimumVersion) {
+export const checkVersion = () => {
+    request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
+        const currentVersion = JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version;
+        const latestVersion = JSON.parse(response).tag_name.replace("v", "");
 
-    var v1 = myVersion.split("."), v2 = minimumVersion.split("."), minLength;
-
-    minLength = Math.min(v1.length, v2.length);
-
-    for (i = 0; i < minLength; i++) {
-        if (Number(v1[i]) > Number(v2[i])) {
-            return true;
+        const currentSplit = currentVersion.split(".");
+        const latestSplit = latestVersion.split(".");
+        for (var i = 0; i < 3; i++) {
+            if (Number(currentSplit[i]) < Number(latestSplit[i])) {
+                ChatLib.chat("&3[BHTSL] &aNew BHTSL version available! &7v&f" + currentVersion + "&a -> &7v&f" + latestVersion);
+                ChatLib.chat(new Message(
+                    "&3[BHTSL] ",
+                    new TextComponent("&6[&eView changelog&6]").setClick("run_command", "/bhtsl latestchangelog"),
+                    " ",
+                    new TextComponent("&5[&dGithub&5]").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases/latest"),
+                    " ",
+                    new TextComponent("&2[&aDirect download&2]").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases/latest/download/BHTSL.zip")
+                ));
+            }
         }
-        if (Number(v1[i]) < Number(v2[i])) {
-            return false;
-        }
-    }
+    }).catch(error => {
+        ChatLib.chat("&3[BHTSL] &cError while starting version check");
+        console.log(error);
+    });
+};
 
-    return (v1.length >= v2.length);
-}
-
-let load = register("worldLoad", () => {
+/* export const checkVersion = () => {
     try {
         axios({
             url: "https://raw.githubusercontent.com/Builderboy271/BHTSL/main/metadata.json",
-            method: 'GET'
+            method: "GET"
         }).then(response => {
             const latestVersion = response.data.version;
             const currentVersion = JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version;
-            if (Settings.loadMessage) ChatLib.chat(`&3[BHTSL] &fLoaded successfully!`);
-            if (versionCompare(currentVersion, latestVersion)) {
-                return;
+            
+            if (Settings.loadMessage) ChatLib.chat("&3[BHTSL] &fLoaded successfully!");
+
+            let v1 = currentVersion.split(".");
+            let v2 = latestVersion.split(".");
+            let isUpToDate = true;
+            let minLength = Math.min(v1.length, v2.length);
+
+            for (let i = 0; i < minLength; i++) {
+                if (Number(v1[i]) > Number(v2[i])) {
+                    isUpToDate = true;
+                    break;
+                }
+                if (Number(v1[i]) < Number(v2[i])) {
+                    isUpToDate = false;
+                    break;
+                }
+                if (i === minLength - 1) {
+                    isUpToDate = v1.length >= v2.length;
+                }
             }
-            ChatLib.chat(new Message(new TextComponent("&3[BHTSL] &fNew BHTSL version available!").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases")));
-    
+
+            if (isUpToDate) return;
+
+            ChatLib.chat("&3[BHTSL] &aNew BHTSL version available! &7v&f" + currentVersion + "&7 -> v&f" + latestVersion);
+            ChatLib.chat(new Message(
+                "&3[BHTSL] ",
+                new TextComponent("&6[&eView changelog&6]").setClick("run_command", "/bhtsl latestchangelog"),
+                " ",
+                new TextComponent("&5[&dGithub&5]").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases/latest"),
+                " ",
+                new TextComponent("&2[&aDirect download&2]").setClick("open_url", "https://github.com/Builderboy271/BHTSL/releases/latest/download/BHTSL.zip")
+            ));
+        }).catch(err => {
+            ChatLib.chat("&3[BHTSL] &cError while checking version");
         });
     } catch (error) {
-        ChatLib.chat("&3[BHTSL] &cError while checking version");
+        ChatLib.chat("&3[BHTSL] &cError while starting version check");
     }
-    load.unregister();
+}; */
+
+register("worldLoad", () => {
+    checkVersion();
 });
-
-function directoryExists(directoryPath) {
-    let dir = new java.io.File(directoryPath);
-    return dir.exists() && dir.isDirectory();
-}
-
-if (!directoryExists("./config/ChatTriggers/modules/BHTSL/imports")) {
-    FileLib.write("BHTSL", "./imports/default.htsl", "playerWeather Raining\nplayerTime 1000\n\n// Does anyone even read this?\nteamstat test Blue set 12\nteamvar test Blue set 12 false\nglobalstat test set 12\nglobalvar test set 12 false\nstat test set 12\nvar test set 12 false", true);
-    FileLib.write("BHTSL", "./imports/stone.json", "{\"item\": \"{id:\\\"minecraft:stone\\\",Count:1b,Damage:0s}\"}", true);
-
-}

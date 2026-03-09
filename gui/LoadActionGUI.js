@@ -4,6 +4,7 @@ import exportAction from '../compiler/exportAction';
 import Settings from '../utils/config';
 import getItemFromNBT from '../utils/getItemFromNBT';
 import loadItemstack from '../utils/loadItemstack';
+import codeWindow from '../gui/codeWindow';
 
 const guiTopField = net.minecraft.client.gui.inventory.GuiContainer.class.getDeclaredField('field_147009_r');
 const xSizeField = net.minecraft.client.gui.inventory.GuiContainer.class.getDeclaredField('field_146999_f');
@@ -27,6 +28,7 @@ const folderIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./conf
 const nh_htslIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_htsl.png`)));
 const nh_itemIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_item.png`)));
 const nh_folderIcon = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/nh_folder.png`)));
+const editPen = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/pen.png`)));
 const trashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin_closed.png`)));
 const openTrashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./config/ChatTriggers/modules/BHTSL/assets/bin.png`)));
 
@@ -49,7 +51,7 @@ let cacheTimestamp = 0;
 let CACHE_DURATION = 5000; // Cache for 5 seconds
 let searchTimeout = null;
 let lastSearchPath = null;
-let lastRawFiles = null;
+let lastFilteredSearchText = "";
 
 function renderActionGUI(x, y) {
     if (!Player.getContainer() || !(Settings.guiAvaliableEverywhere ? isInItemGui() : isInActionGui()) || isImporting()) return;
@@ -106,10 +108,12 @@ function renderActionGUI(x, y) {
                     hovered = true;
                     Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
                     
+                    if (currentFile.endsWith(".htsl")) Renderer.drawImage(editPen, xBound - 40, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
                     if (currentFile.endsWith(".htsl") || currentFile.endsWith(".json")) {
                         let isHoveringTrash = (x < xBound - 8 && x > xBound - 24);
-                        Renderer.drawImage(isHoveringTrash ? openTrashBin : trashBin, xBound - 24, topBound + 3 + 20 * (i - page * linesPerPage), 16, 16);
+                        Renderer.drawImage(isHoveringTrash ? openTrashBin : trashBin, xBound - 20, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
                     }
+
                 }
 
                 let item = null;
@@ -151,17 +155,17 @@ function renderActionGUI(x, y) {
 					while (Renderer.getStringWidth("..." + baseName + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
 						baseName = baseName.substring(1);
 					}
-					baseName = "&8...&7" + baseName;
+					baseName = "&8...&f" + baseName;
 				}
 
                 let renderedName = baseName + extension;
 				
 				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
 
-				if (input.getText() != "Enter File Name" && input.getText() != "" && Renderer.getStringWidth(renderedName) <= maxTextWidth) {
-					let searchIdx = renderedName.toLowerCase().indexOf(input.getText().toLowerCase());
+				if (lastFilteredSearchText != "Enter File Name" && lastFilteredSearchText != "" && Renderer.getStringWidth(renderedName) <= maxTextWidth) {
+					let searchIdx = renderedName.removeFormatting().toLowerCase().indexOf(lastFilteredSearchText.toLowerCase());
 					if (searchIdx !== -1) {
-						Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(renderedName.substring(0, searchIdx)), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(input.getText()), 17);
+						Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(renderedName.substring(0, searchIdx)), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(lastFilteredSearchText), 17);
 					}
 				}
             }
@@ -285,7 +289,13 @@ register('guiMouseClick', (x, y, mouseButton) => {
         let fileIdx = index + (page * linesPerPage);
         if (filteredFiles[fileIdx]) {
             let selected = filteredFiles[fileIdx];
-            if (selected.includes(".") && x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 24) {
+            if (selected.endsWith('.htsl') && x < input.getX() + input.getWidth() - 28 && x > input.getX() + input.getWidth() - 40) {
+                World.playSound('random.fizz', 0.1, 1);
+                World.playSound('liquid.lavapop', 0.5, 0.5);
+                codeWindow(`${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${selected.substring(0, selected.length - 5)}`);
+                return;
+            }
+            if (selected.includes(".") && x < input.getX() + input.getWidth() - 8 && x > input.getX() + input.getWidth() - 20) {
                 World.playSound('random.fizz', 0.1, 1);
 				World.playSound('liquid.lavapop', 0.5, 0.5);
                 FileLib.delete("BHTSL", `imports/${selected}`);
@@ -382,8 +392,9 @@ function readFiles() {
         }
 
         // Only update filtered results
-        const newFilteredFiles = isSearching ? files.filter(n => n.toLowerCase().includes(searchText.toLowerCase())) : files;
+        const newFilteredFiles = isSearching ? files.filter(n => n.removeFormatting().toLowerCase().includes(searchText.toLowerCase())) : files;
         filteredFiles = newFilteredFiles;
+        lastFilteredSearchText = searchText;
     } catch (e) { console.error(e); }
 }
 

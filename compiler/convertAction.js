@@ -1,4 +1,4 @@
-import { request as axios } from "axios";
+import request from "requestv2";
 import Settings from "../utils/config";
 import syntaxs from "../actions/syntax";
 import menus from "../actions/menus";
@@ -15,10 +15,7 @@ const housingEditor = 'https://api.housingeditor.com'
 export function convertHE(actionId, filename) {
     if (actionId === 'test') return loadTestAction();
 
-    axios({
-        url: `${housingEditor}/actions/${actionId}`,
-        method: 'GET',
-    }).then(response => {
+    request("${housingEditor}/actions/${actionId}").then(response => {
         const json = response.data;
         FileLib.write(`./config/ChatTriggers/modules/BHTSL/imports/${filename}.htsl`, convertData(json.actionData, json.post?.title, json.author?.name));
     }).catch(error => {

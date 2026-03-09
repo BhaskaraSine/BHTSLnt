@@ -17,6 +17,7 @@ import loadItemstack from './utils/loadItemstack';
 import { loadAction } from './compiler/loadAction';
 import { compile } from './compiler/compile';
 import Settings from './utils/config';
+import request from 'requestv2';
 
 register("command", ...args => {
     let command;
@@ -37,10 +38,25 @@ register("command", ...args => {
         return ChatLib.chat(guideLink);
     }
     if (command === 'changelog') {
-        ChatLib.chat("&3[BHTSL] &fChanges:");
-        let changelog = FileLib.read('./config/ChatTriggers/modules/BHTSL/update/changelog.txt').split("\n");
+        ChatLib.chat("&3[BHTSL] &7v&f" + JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version + "&e Changes:");
+        ChatLib.chat("");
+        const changelog = FileLib.read("./config/ChatTriggers/modules/BHTSL/update/changelog.txt").split("\n").slice(2);
         changelog.forEach(line => {
-            ChatLib.chat(line.trim());
+            ChatLib.chat("&8" + line.trim().slice(0, 1) + "&f" + line.trim().slice(1));
+        });
+        return;
+    }
+    if (command === 'latestchangelog') {
+        request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
+            const changelog = JSON.parse(response).body.split("\n");
+
+            ChatLib.chat("&3[BHTSL] &7v&f" + JSON.parse(response).tag_name.replace("v", "") + "&e Changes:");
+            ChatLib.chat("");
+            changelog.forEach(line => {
+                ChatLib.chat("&8" + line.trim().slice(0, 1) + "&f" + line.trim().slice(1));
+            });
+        }).catch (error => {
+            ChatLib.chat("&3[BHTSL] &cError fetching latest changelog");
         });
         return;
     }
@@ -90,7 +106,7 @@ register("command", ...args => {
         });
     }
     if (command === "version") {
-        return ChatLib.chat(`&3[BHTSL] &fVersion ${JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version}`);
+        return ChatLib.chat(`&3[BHTSL] &7v&f${JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version}`);
     }
     if (command === "giveitem") {
         if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) {

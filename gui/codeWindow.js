@@ -37,6 +37,8 @@ function guiRender(mouseX, mouseY, partialTicks) {
 }
 
 function guiTextRegister(typedChar, keyCode) {
+    cursorBlink = 50.0;
+    
     let line = guiText[startIndex + cursorLine];
     // Enter key
     if (keyCode === 28.0) {
