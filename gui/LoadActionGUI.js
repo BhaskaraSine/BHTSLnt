@@ -51,7 +51,6 @@ let cacheTimestamp = 0;
 let CACHE_DURATION = 5000; // Cache for 5 seconds
 let searchTimeout = null;
 let lastSearchPath = null;
-let lastFilteredSearchText = "";
 
 function renderActionGUI(x, y) {
     if (!Player.getContainer() || !(Settings.guiAvaliableEverywhere ? isInItemGui() : isInActionGui()) || isImporting()) return;
@@ -108,9 +107,12 @@ function renderActionGUI(x, y) {
                     hovered = true;
                     Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
                     
-                    if (currentFile.endsWith(".htsl")) Renderer.drawImage(editPen, xBound - 40, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
+                    if (currentFile.endsWith(".htsl")) {
+                        let isHoveringPen = (x < xBound - 24 && x > xBound - 40);
+                        Renderer.drawImage(isHoveringPen ? openTrashBin : editPen, xBound - 40, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
+                    }
                     if (currentFile.endsWith(".htsl") || currentFile.endsWith(".json")) {
-                        let isHoveringTrash = (x < xBound - 8 && x > xBound - 24);
+                        let isHoveringTrash = (x < xBound - 4 && x > xBound - 20);
                         Renderer.drawImage(isHoveringTrash ? openTrashBin : trashBin, xBound - 20, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
                     }
 
@@ -161,13 +163,6 @@ function renderActionGUI(x, y) {
                 let renderedName = baseName + extension;
 				
 				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
-
-				if (lastFilteredSearchText != "Enter File Name" && lastFilteredSearchText != "" && Renderer.getStringWidth(renderedName) <= maxTextWidth) {
-					let searchIdx = renderedName.removeFormatting().toLowerCase().indexOf(lastFilteredSearchText.toLowerCase());
-					if (searchIdx !== -1) {
-						Renderer.drawRect(Renderer.color(252, 229, 15, 100), input.getX() + 21 + Renderer.getStringWidth(renderedName.substring(0, searchIdx)), topBound + 5 + 20 * (i - page * linesPerPage), Renderer.getStringWidth(lastFilteredSearchText), 17);
-					}
-				}
             }
             if (!hovered) hoveringIndex = -1;
             if (filteredFiles.length == 0) Renderer.drawString("Nothing is here...", input.getX() + 10, topBound + 9, true);
@@ -393,7 +388,6 @@ function readFiles(forceRefresh = false) {
         // Only update filtered results
         const newFilteredFiles = isSearching ? files.filter(n => n.removeFormatting().toLowerCase().includes(searchText.toLowerCase())) : files;
         filteredFiles = newFilteredFiles;
-        lastFilteredSearchText = searchText;
     } catch (e) { console.error(e); }
 }
 
