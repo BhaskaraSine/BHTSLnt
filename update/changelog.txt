@@ -3,7 +3,7 @@ Patch v2.0.2:
 - Added edit button to action GUI files (option)
 - Added version check every 30 minutes (option)
 - Added version check to "/bhtsl version" and "/bhtsl changelog"
-- Added pulling update information from the latest github release instead of the repository
+- Added pulling update information from the latest Github release instead of the repository
 - Replaced Axios dependency with Requestv2
 - Reworked code window
 - Renamed "/bhtsl gui" to "/bhtsl edit"
