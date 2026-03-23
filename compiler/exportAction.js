@@ -170,6 +170,7 @@ function processPage(items, actionList, menuList, condition) {
                             break;
                         }
                         if (!(value.startsWith("\"") && value.endsWith("\""))) value = value.replaceAll(",", "");
+                        if (line.startsWith("§5§o§7Sound:") || line.startsWith("§5§o§7Message:")) value = `"` + value + `"`;
                         actionobj[property] = value;
                         break;
                 }

@@ -168,7 +168,7 @@ register("command", ...args => {
 
             ChatLib.chat("&3[BHTSL] &bReloading Chattriggers...");
 
-            ChatLib.command("ct reload", true);
+            ChatTriggers.loadCT();
         }).catch (error => {
             ChatLib.chat("&3[BHTSL] &cError fetching latest update");
         });
