@@ -131,39 +131,7 @@ register("command", ...args => {
             return;
         }
     }
-    if (command === 'help') {
-        ChatLib.chat('&8&m-------------------------------------------------');
-        ChatLib.chat('&6/bhtsl help &7Opens the BHTSL help menu!')
-        ChatLib.chat('&6/bhtsl edit <script name> &7Opens a window for editing scripts!');
-        ChatLib.chat('&6/bhtsl config &7Opens the settings menu for BHTSL!');
-        ChatLib.chat('&6/bhtsl guide &7Opens a syntax guide!');
-        ChatLib.chat('&6/bhtsl changelog &7Shows you all the significant changes made in the last update!');
-        ChatLib.chat('&6/bhtsl saveitem <filename> &7Save an item to import!');
-        ChatLib.chat('&6/bhtsl convert <action id> <filename> &7Converts a HousingEditor action to BHTSL!');
-        ChatLib.chat('&6/bhtsl addfunctions <filename> &7Imports all the required functions to prepare for import!');
-        ChatLib.chat('&6/bhtsl listscripts &7Lists all your scripts');
-        ChatLib.chat('&6/bhtsl version &7Returns your current BHTSL version');
-        ChatLib.chat('&6/bhtsl giveitem <filename> &7Gives you an item from your imports');
-        ChatLib.chat('&6/bhtsl import <filename> &7Imports given file (ignores default context)');
-        ChatLib.chat('&8&m-------------------------------------------------');
-        return;
-    }
-    if (command === '_latestchangelog') {
-        request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
-            const changelog = JSON.parse(response).body.split("\n");
-
-            ChatLib.chat("&3[BHTSL] &7v&f" + JSON.parse(response).tag_name.replace("v", "") + "&e Changes:");
-            ChatLib.chat("");
-            changelog.forEach(line => {
-                ChatLib.chat("&8" + line.trim().slice(0, 1) + "&f" + line.trim().slice(1));
-            });
-            ChatLib.chat("");
-        }).catch (error => {
-            ChatLib.chat("&3[BHTSL] &cError fetching latest changelog");
-        });
-        return;
-    }
-    if (command === '_installlatestupdate') {
+    if (command === "installupdate") {
         request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
             const author = JSON.parse(response).author.id;
             if (author !== 257887200) {
@@ -203,6 +171,39 @@ register("command", ...args => {
             ChatLib.command("ct reload", true);
         }).catch (error => {
             ChatLib.chat("&3[BHTSL] &cError fetching latest update");
+        });
+        return;
+    }
+    if (command === 'help') {
+        ChatLib.chat('&8&m-------------------------------------------------');
+        ChatLib.chat('&6/bhtsl help &7Opens the BHTSL help menu!')
+        ChatLib.chat('&6/bhtsl edit <script name> &7Opens a window for editing scripts!');
+        ChatLib.chat('&6/bhtsl config &7Opens the settings menu for BHTSL!');
+        ChatLib.chat('&6/bhtsl guide &7Opens a syntax guide!');
+        ChatLib.chat('&6/bhtsl changelog &7Shows you all the significant changes made in the last update!');
+        ChatLib.chat('&6/bhtsl saveitem <filename> &7Save an item to import!');
+        ChatLib.chat('&6/bhtsl convert <action id> <filename> &7Converts a HousingEditor action to BHTSL!');
+        ChatLib.chat('&6/bhtsl addfunctions <filename> &7Imports all the required functions to prepare for import!');
+        ChatLib.chat('&6/bhtsl listscripts &7Lists all your scripts');
+        ChatLib.chat('&6/bhtsl version &7Returns your current BHTSL version');
+        ChatLib.chat('&6/bhtsl giveitem <filename> &7Gives you an item from your imports');
+        ChatLib.chat('&6/bhtsl import <filename> &7Imports given file (ignores default context)');
+        ChatLib.chat('&6/bhtsl installupdate &7Downloads and installs the latest update (can be used to reinstall)');
+        ChatLib.chat('&8&m-------------------------------------------------');
+        return;
+    }
+    if (command === '_latestchangelog') {
+        request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
+            const changelog = JSON.parse(response).body.split("\n");
+
+            ChatLib.chat("&3[BHTSL] &7v&f" + JSON.parse(response).tag_name.replace("v", "") + "&e Changes:");
+            ChatLib.chat("");
+            changelog.forEach(line => {
+                ChatLib.chat("&8" + line.trim().slice(0, 1) + "&f" + line.trim().slice(1));
+            });
+            ChatLib.chat("");
+        }).catch (error => {
+            ChatLib.chat("&3[BHTSL] &cError fetching latest changelog");
         });
         return;
     } else {
