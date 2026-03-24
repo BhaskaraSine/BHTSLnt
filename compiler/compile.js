@@ -1,4 +1,4 @@
-import { loadAction, working } from "./loadAction";
+import { loadAction } from "./loadAction";
 import Settings from "../utils/config";
 import menus from "../actions/menus";
 import conditions from "../actions/conditions";
@@ -7,17 +7,6 @@ import syntaxes from "../actions/syntax";
 let shortcuts = [];
 let path = "";
 
-export function isImporting() {
-	return working();
-}
-
-/**
- * Compiles an HTSL program into a series of Actions.
- * @param {string} fileName The name of the file to compile. 
- * @param {string} dissallowedFiles Files to exclude from the compilation.
- * @param {boolean} nested Whether to check for nested files or not. 
- * @returns 
- */
 export function compile(fileName, dissallowedFiles, nested) {
     if (!nested) path = fileName.substring(0, fileName.lastIndexOf("/") + 1);
 	try {
