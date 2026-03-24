@@ -288,7 +288,7 @@ register("packetReceived", (packet, event) => {
     if (!packet.func_149174_e()) return;
     itemCallback(`{"item": "${new Item(packet.func_149174_e()).getNBT().toString().replace(/["]/g, '\\$&')}"}`);
     Navigator.waitingForItem = false;
-    cancel(event);
+    loadItem(null, packet.func_149173_d() - 27); //27 to offset for the slotid
     click(31);
 }).setFilteredClass(S2FPacketSetSlot);
 
