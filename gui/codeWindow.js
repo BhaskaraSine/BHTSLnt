@@ -10,9 +10,6 @@ let startIndex = 0;
 let lineLimit = Math.floor((Renderer.screen.getHeight() - 7) / 20);
 let originalRepeat = false;
 
-// ========================
-// NEW: Line wrapping helpers
-// ========================
 function wrapLine(line, maxW) {
     if (!line || line.length === 0) {
         return [{escaped: "", origStart: 0, origEnd: 0}];
@@ -116,7 +113,6 @@ register("postGuiRender", () => {
     lineLimit = Math.floor((Renderer.screen.getHeight() - 7) / 20);
     const digitCount = guiText.length.toString().length;
 
-    // We use "0" as our width-standard because Minecraft numbers are mostly uniform width
     // This prefix is used to calculate exactly where the text should start
     const samplePrefix = "0".repeat(digitCount) + " ⏐ ";
     const prefixWidth = Renderer.getStringWidth(samplePrefix);
@@ -140,17 +136,13 @@ register("postGuiRender", () => {
 
             let subDisplay = lineText.startsWith("//") ? "&2" + processed : syntaxHighlight(processed);
 
-            // --- ALIGNMENT FIX START ---
             let lineNumStr;
             if (subIdx === 0) {
-                // Normal line: Gray numbers + White separator
                 lineNumStr = `&7${("0".repeat(digitCount) + (i + 1)).slice(-digitCount)} &f⏐ &f`;
             } else {
-                // Wrapped line: Use "Ghost" numbers (Dark Gray &8) to match pixel width exactly
                 // This replaces " ".repeat(digitCount) which was causing the misalignment
                 lineNumStr = `&8${"-".repeat(digitCount)} &f⏐ &f`;
             }
-            // --- ALIGNMENT FIX END ---
 
             Renderer.drawString(lineNumStr + subDisplay, Renderer.screen.getWidth() / 4 + 7, Renderer.screen.getHeight() / 4 + visualIndex * 10 + 7, true);
             visualIndex++;
@@ -162,7 +154,6 @@ register("postGuiRender", () => {
     if (cursorBlink >= 50) {
         let logicalIdx = startIndex + cursorLine;
         
-        // Use the EXACT same maxTextWidth used in the render loop
         const samplePrefixCursor = "0".repeat(digitCount) + " ⏐ ";
         const prefixWidthCursor = Renderer.getStringWidth(samplePrefixCursor);
         const maxTextWidthCursor = Renderer.screen.getWidth() / 2 - 14 - prefixWidthCursor;
@@ -170,14 +161,11 @@ register("postGuiRender", () => {
         let subInfo = getCursorSubInfo(logicalIdx, maxTextWidthCursor);
         let textBeforeCursor = subInfo.beforeEsc;
 
-        // FIXED: The linePrefix must match the rendered string's character count exactly.
-        // We calculate the width of the gutter (numbers + separator) 
         // using the same sample string as the renderer.
         let linePrefixWidth = Renderer.getStringWidth(samplePrefixCursor);
 
         let cursorVisualRow = getVisualLinesBefore(logicalIdx, startIndex, maxTextWidthCursor) + subInfo.subIdx;
 
-        // We add the gutter width to the width of the text before the cursor
         let x = Renderer.screen.getWidth() / 4 + 7 + linePrefixWidth + Renderer.getStringWidth(textBeforeCursor);
         let y = Renderer.screen.getHeight() / 4 + cursorVisualRow * 10 + 7;
         
