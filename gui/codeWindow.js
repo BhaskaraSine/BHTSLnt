@@ -7,7 +7,7 @@ let cursorBlink = 0;
 let cursorIndex = 0;
 let fileNameSave = "";
 let startIndex = 0;
-let lineLimit = Math.floor((Renderer.screen.getHeight() - 7) / 20);
+let lineLimit = Math.ceil((Renderer.screen.getHeight() - 14) / 10);
 let originalRepeat = false;
 
 function wrapLine(line, maxW) {
@@ -39,7 +39,7 @@ function wrapLine(line, maxW) {
 
 function getMaxTextWidth(digitCount) {
     const sample = ("0".repeat(digitCount) + " ⏐ ");
-    return Renderer.screen.getWidth() / 2 - 14 - Renderer.getStringWidth(sample);
+    return Renderer.screen.getWidth() * 0.8 - 14 - Renderer.getStringWidth(sample);
 }
 
 function getVisualLinesBefore(logical, startIdx, maxW) {
@@ -72,7 +72,7 @@ function ensureCursorVisible() {
     if (!codeIsOpen) return;
     const digitCount = guiText.length.toString().length || 1;
     const maxW = getMaxTextWidth(digitCount);
-    const lineLim = Math.floor((Renderer.screen.getHeight() - 7) / 20);
+    const lineLim = Math.ceil((Renderer.screen.getHeight() - 14) / 10);
     let logical = startIndex + cursorLine;
     if (logical >= guiText.length) logical = Math.max(0, guiText.length - 1);
     let visualBefore = getVisualLinesBefore(logical, startIndex, maxW);
@@ -106,17 +106,21 @@ register("guiMouseClick", (x, y, button, gui, event) => {
 
 register("postGuiRender", () => {
     if (!codeIsOpen) return;
+
+    const winW = Renderer.screen.getWidth() * 0.8;
+    const winH = Renderer.screen.getHeight() * 0.8;
+    const winX = (Renderer.screen.getWidth() - winW) / 2;
+    const winY = (Renderer.screen.getHeight() - winH) / 2;
     
     // Draw Background
-    Renderer.drawRect(Renderer.color(30, 30, 30, 200), Renderer.screen.getWidth() / 4, Renderer.screen.getHeight() / 4, Renderer.screen.getWidth() / 2, Renderer.screen.getHeight() / 2);
-    
-    lineLimit = Math.floor((Renderer.screen.getHeight() - 7) / 20);
+    Renderer.drawRect(Renderer.color(30, 30, 30, 220), winX, winY, winW, winH);
+
+    lineLimit = Math.ceil((winH - 14) / 10);
     const digitCount = guiText.length.toString().length;
 
-    // This prefix is used to calculate exactly where the text should start
     const samplePrefix = "0".repeat(digitCount) + " ⏐ ";
     const prefixWidth = Renderer.getStringWidth(samplePrefix);
-    const maxTextWidth = Renderer.screen.getWidth() / 2 - 14 - prefixWidth;
+    const maxTextWidth = winW - 14 - prefixWidth;
 
     let visualIndex = 0;
     for (let i = startIndex; i < guiText.length && visualIndex < lineLimit; i++) {
@@ -135,7 +139,6 @@ register("postGuiRender", () => {
             }
 
             let subDisplay = lineText.startsWith("//") ? "&2" + processed : syntaxHighlight(processed);
-
             let lineNumStr;
             if (subIdx === 0) {
                 lineNumStr = `&7${("0".repeat(digitCount) + (i + 1)).slice(-digitCount)} &f⏐ &f`;
@@ -144,7 +147,7 @@ register("postGuiRender", () => {
                 lineNumStr = `&8${"-".repeat(digitCount)} &f⏐ &f`;
             }
 
-            Renderer.drawString(lineNumStr + subDisplay, Renderer.screen.getWidth() / 4 + 7, Renderer.screen.getHeight() / 4 + visualIndex * 10 + 7, true);
+            Renderer.drawString(lineNumStr + subDisplay, winX + 7, winY + visualIndex * 10 + 7, true);
             visualIndex++;
         }
     }
@@ -153,21 +156,11 @@ register("postGuiRender", () => {
     cursorBlink = (cursorBlink + 1) % 100;
     if (cursorBlink >= 50) {
         let logicalIdx = startIndex + cursorLine;
-        
-        const samplePrefixCursor = "0".repeat(digitCount) + " ⏐ ";
-        const prefixWidthCursor = Renderer.getStringWidth(samplePrefixCursor);
-        const maxTextWidthCursor = Renderer.screen.getWidth() / 2 - 14 - prefixWidthCursor;
+        let subInfo = getCursorSubInfo(logicalIdx, maxTextWidth);
+        let cursorVisualRow = getVisualLinesBefore(logicalIdx, startIndex, maxTextWidth) + subInfo.subIdx;
 
-        let subInfo = getCursorSubInfo(logicalIdx, maxTextWidthCursor);
-        let textBeforeCursor = subInfo.beforeEsc;
-
-        // using the same sample string as the renderer.
-        let linePrefixWidth = Renderer.getStringWidth(samplePrefixCursor);
-
-        let cursorVisualRow = getVisualLinesBefore(logicalIdx, startIndex, maxTextWidthCursor) + subInfo.subIdx;
-
-        let x = Renderer.screen.getWidth() / 4 + 7 + linePrefixWidth + Renderer.getStringWidth(textBeforeCursor);
-        let y = Renderer.screen.getHeight() / 4 + cursorVisualRow * 10 + 7;
+        let x = winX + 7 + prefixWidth + Renderer.getStringWidth(subInfo.beforeEsc);
+        let y = winY + cursorVisualRow * 10 + 7;
         
         Renderer.drawRect(Renderer.color(200, 200, 200, 256), x, y, 1, 8);
     }
