@@ -209,7 +209,7 @@ register("command", ...args => {
     } else {
         ChatLib.chat('&3[BHTSL] &fUnknown command! Try /bhtsl for help!');
     }
-}).setName('bhtsl').setAliases(['htsl', 'bht', 'ht']);
+}).setTabCompletions("help", "edit", "config", "guide", "changelog", "saveitem", "convert", "addfunctions", "listscripts", "version", "giveitem", "import", "installupdate").setName('bhtsl').setAliases(['htsl', 'bht', 'ht']);
 
 function readDir(path, walk) {
     let files = new java.io.File(path).listFiles();
