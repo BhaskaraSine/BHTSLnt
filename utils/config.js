@@ -1,4 +1,4 @@
-import { @Vigilant @SliderProperty @SwitchProperty @NumberProperty @TextProperty @ButtonProperty @SliderProperty @CheckboxProperty } from 'Vigilance';
+import { @Vigilant @SliderProperty @SwitchProperty @NumberProperty @TextProperty @ButtonProperty @CheckboxProperty } from 'Vigilance';
 
 @Vigilant("BHTSL", `BHTSL`, {
 	getCategoryComparator: () => (a, b) => {
@@ -69,11 +69,19 @@ class Settings {
 
 	@SwitchProperty({
 		name: "Emergency reload button",
-		description: 'Reloads chattriggers in case of softlock. Mainly use for debugging.',
+		description: 'Reloads chattriggers in case of softlock. Mainly use for debugging',
 		category: "General",
 		subcategory: "General",
 	})
 	reloadButton = false;
+
+	@SwitchProperty({
+		name: "No cursor wipe",
+		description: 'Cancel the packets sent by Hypixel to wipe your cursor periodically if you are in creative mode\n\n&cWarning: canceling packets sent by Hypixel is not "safe" behavior, use at your own risk',
+		category: "General",
+		subcategory: "General",
+	})
+	noCursorWipe = false;
 
 	// Importing/Exporting 
 
