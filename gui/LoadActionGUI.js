@@ -263,14 +263,14 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
         if (slot && slot.getItem()) {
             let item = slot.getItem().getNBT().toString().replace(/["]/g, '\\$&');
             
-            let baseDir = `./config/ChatTriggers/modules/BHTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${subDir}`;
+            let baseDir = `./config/ChatTriggers/modules/BHTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${subDir}${input.getText().replace(/[^\\/]+$/, '')}`;
             
             let originalName = "exported_item";
             if (Settings.useItemNameForExportedItems) {
                 originalName = slot.getItem().getName().replace(/§./g, '').replace(/[/\\?%*:|"<>]/g, '_').replace(/\s+/g, '_').trim() || "unnamed_item";
             }
-            if (input.getText() !== "Enter File Name" && input.getText() !== "") {
-                originalName = input.getText();
+            if (input.getText() !== "Enter File Name" && input.getText().replace(/^.*[\\/]/, '') !== "") {
+                originalName = input.getText().replace(/^.*[\\/]/, '');
             }
             
             let finalName = originalName;
