@@ -229,7 +229,7 @@ const sounds = [
 ];
 
 export default (sound) => {
-    let path = sounds.find(e => e.name == sound);
-    if (path) return path.path;
-    return sound;
+  let path = sounds.find(e => e.name == sound);
+  if (path) return path.path;
+  return sound;
 }

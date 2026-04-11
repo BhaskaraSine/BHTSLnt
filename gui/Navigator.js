@@ -13,7 +13,7 @@ const C01PacketChatMessage = Java.type(
   "net.minecraft.network.play.client.C01PacketChatMessage"
 );
 const S2FPacketSetSlot = Java.type(
-    "net.minecraft.network.play.server.S2FPacketSetSlot"
+  "net.minecraft.network.play.server.S2FPacketSetSlot"
 );
 const slotIdField =
   C0EPacketClickWindow.class.getDeclaredField("field_149552_b");
@@ -243,7 +243,7 @@ function inputChat(text, func, command) {
   if (Settings.useSafeMode) Client.Companion.setCurrentChatMessage(text);
   else {
     Client.sendPacket(new C01PacketChatMessage(
-      `${command? "" : "/ac "}` + text
+      `${command ? "" : "/ac "}` + text
     ));
   }
   setNotReady();
@@ -276,23 +276,23 @@ function deleteAction() {
 
 let itemCallback;
 function getItemFromAction(callback) {
-    Navigator.waitingForItem = true;
-    Navigator.isWorking = true;
-    click(13);
-    itemCallback = callback;
+  Navigator.waitingForItem = true;
+  Navigator.isWorking = true;
+  click(13);
+  itemCallback = callback;
 }
 
 register("packetReceived", (packet, event) => {
-    if (!Navigator.isWorking) return;
-    if (!Navigator.waitingForItem) return;
-    if (!packet.func_149174_e()) return;
-    itemCallback(`{"item": "${new Item(packet.func_149174_e()).getNBT().toString().replace(/["]/g, '\\$&')}"}`);
-    Navigator.waitingForItem = false;
-    new Thread(() => {
-        Thread.sleep(1000);
-        loadItem(null, packet.func_149173_d() - 27); //27 to offset for the slotid
-    }).start();
-    click(31);
+  if (!Navigator.isWorking) return;
+  if (!Navigator.waitingForItem) return;
+  if (!packet.func_149174_e()) return;
+  itemCallback(`{"item": "${new Item(packet.func_149174_e()).getNBT().toString().replace(/["]/g, '\\$&')}"}`);
+  Navigator.waitingForItem = false;
+  new Thread(() => {
+    Thread.sleep(1000);
+    loadItem(null, packet.func_149173_d() - 27); //27 to offset for the slotid
+  }).start();
+  click(31);
 }).setFilteredClass(S2FPacketSetSlot);
 
 export default Navigator = {

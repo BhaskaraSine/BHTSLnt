@@ -12,7 +12,7 @@ let originalRepeat = false;
 
 function wrapLine(line, maxW) {
     if (!line || line.length === 0) {
-        return [{escaped: "", origStart: 0, origEnd: 0}];
+        return [{ escaped: "", origStart: 0, origEnd: 0 }];
     }
     let subs = [];
     let pos = 0;
@@ -31,7 +31,7 @@ function wrapLine(line, maxW) {
         if (goodPos === startPos) goodPos = startPos + 1; // force at least one char
         let prefixOrig = line.substring(startPos, goodPos);
         let escSub = prefixOrig.replace(/&([0-9a-fk-or])/gi, "&⛓$1");
-        subs.push({escaped: escSub, origStart: startPos, origEnd: goodPos});
+        subs.push({ escaped: escSub, origStart: startPos, origEnd: goodPos });
         pos = goodPos;
     }
     return subs;
@@ -65,7 +65,7 @@ function getCursorSubInfo(logicalIdx, maxW) {
     let beforeLenInSub = remaining;
     let prefixOrig = currentLineText.substring(subStart, subStart + beforeLenInSub);
     let beforeEsc = prefixOrig.replace(/&([0-9a-fk-or])/gi, "&⛓$1");
-    return {subIdx, beforeEsc};
+    return { subIdx, beforeEsc };
 }
 
 function ensureCursorVisible() {
@@ -111,7 +111,7 @@ register("postGuiRender", () => {
     const winH = Renderer.screen.getHeight() * 0.8;
     const winX = (Renderer.screen.getWidth() - winW) / 2;
     const winY = (Renderer.screen.getHeight() - winH) / 2;
-    
+
     // Draw Background
     Renderer.drawRect(Renderer.color(30, 30, 30, 220), winX, winY, winW, winH);
 
@@ -126,7 +126,7 @@ register("postGuiRender", () => {
     for (let i = startIndex; i < guiText.length && visualIndex < lineLimit; i++) {
         let lineText = guiText[i] || "";
         let wrapped = wrapLine(lineText, maxTextWidth);
-        
+
         for (let subIdx = 0; subIdx < wrapped.length && visualIndex < lineLimit; subIdx++) {
             let subEsc = wrapped[subIdx].escaped;
 
@@ -161,7 +161,7 @@ register("postGuiRender", () => {
 
         let x = winX + 7 + prefixWidth + Renderer.getStringWidth(subInfo.beforeEsc);
         let y = winY + cursorVisualRow * 10 + 7;
-        
+
         Renderer.drawRect(Renderer.color(200, 200, 200, 256), x, y, 1, 8);
     }
 });
@@ -283,7 +283,7 @@ register("guiKey", (char, keyCode, gui, event) => {
 export default (fileName) => {
     if (!fileName) fileName = "default";
     fileNameSave = fileName;
-    
+
     let path = `./config/ChatTriggers/modules/BHTSL/imports/${fileName}`;
     let fullPath = FileLib.exists(path + ".htsl") ? path + ".htsl" : (FileLib.exists(path + ".txt") ? path + ".txt" : null);
 

@@ -393,12 +393,12 @@ export default {
                 "Greater Than or Equal",
                 "Greater Than"
             ]
-        }, 
+        },
         compare_value: {
             slot: 11,
             default_value: null,
             type: "string_input"
-        } 
+        }
     },
     BLOCK_TYPE: {
         condition_name: "Block Type",

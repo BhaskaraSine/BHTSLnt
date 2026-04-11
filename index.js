@@ -169,7 +169,7 @@ register("command", ...args => {
             ChatLib.chat("&3[BHTSL] &bReloading Chattriggers...");
 
             ChatTriggers.loadCT();
-        }).catch (error => {
+        }).catch(error => {
             ChatLib.chat("&3[BHTSL] &cError fetching latest update");
         });
         return;
@@ -202,7 +202,7 @@ register("command", ...args => {
                 ChatLib.chat("&8" + line.trim().slice(0, 1) + "&f" + line.trim().slice(1));
             });
             ChatLib.chat("");
-        }).catch (error => {
+        }).catch(error => {
             ChatLib.chat("&3[BHTSL] &cError fetching latest changelog");
         });
         return;
@@ -214,7 +214,7 @@ register("command", ...args => {
 register("packetReceived", (packet, event) => {
     if (Settings.noCursorWipe) {
         if (Player.asPlayerMP() !== null) {
-            if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d){
+            if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d) {
                 if (Player.getContainer().getClassName() == "ContainerCreative") {
                     if (packet.class.getName() == "net.minecraft.network.play.server.S2FPacketSetSlot") {
                         if (packet.func_149174_e() == null && packet.func_149173_d() == -1 && packet.func_149175_c() == -1) {
@@ -283,7 +283,7 @@ function downloadFile(url, destination) {
 
 let load = register("worldLoad", () => {
     if (Settings.loadMessage) ChatLib.chat("&3[BHTSL] &fLoaded successfully! &7v&f" + JSON.parse(FileLib.read("BHTSL", "./metadata.json")).version);
-    
+
     if (Settings.startupVersionCheck) setTimeout(() => {
         checkVersion();
     }, 3000);

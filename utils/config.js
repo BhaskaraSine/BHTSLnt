@@ -85,21 +85,21 @@ class Settings {
 
 	// Importing/Exporting 
 
-    @TextProperty({
-        name: "Item Path Prefix",
-        description: "Modifies where BHTSL looks for/places item references (e.g. \"items\" will look in /project folder/items/)",
-        category: "Importing/Exporting",
-        subcategory: "Importing/Exporting"
-    })
-    itemPrefix = "";
+	@TextProperty({
+		name: "Item Path Prefix",
+		description: "Modifies where BHTSL looks for/places item references (e.g. \"items\" will look in /project folder/items/)",
+		category: "Importing/Exporting",
+		subcategory: "Importing/Exporting"
+	})
+	itemPrefix = "";
 
-    @SwitchProperty({
-        name: "Use Item Name for Exported Items",
-        description: "When exporting an item, use the item name instead of the script name.",
-        category: "Importing/Exporting",
-        subcategory: "Importing/Exporting"
-    })
-    useItemNameForExportedItems = false;
+	@SwitchProperty({
+		name: "Use Item Name for Exported Items",
+		description: "When exporting an item, use the item name instead of the script name.",
+		category: "Importing/Exporting",
+		subcategory: "Importing/Exporting"
+	})
+	useItemNameForExportedItems = false;
 
 	@SwitchProperty({
 		name: "Safe Mode",
@@ -128,7 +128,7 @@ class Settings {
 		max: 1000
 	})
 	guiDelay = 0;
-	
+
 	// Import Menu
 
 	@SwitchProperty({
@@ -214,7 +214,7 @@ class Settings {
 		subcategory: "Code Window"
 	})
 	useExternalEditor = false;
-	
+
 	constructor() {
 		this.initialize(this);
 	}

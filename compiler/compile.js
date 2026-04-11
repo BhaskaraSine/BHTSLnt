@@ -8,7 +8,7 @@ let shortcuts = [];
 let path = "";
 
 export function compile(fileName, dissallowedFiles, nested) {
-    if (!nested) path = fileName.substring(0, fileName.lastIndexOf("/") + 1);
+	if (!nested) path = fileName.substring(0, fileName.lastIndexOf("/") + 1);
 	try {
 		if (!dissallowedFiles) dissallowedFiles = [];
 		let importText;
@@ -95,10 +95,10 @@ function getArgs(input) {
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +globalstat +(?:"([^"]*)"|([^ ]*))/g, replacement: "$1 %stat.global/$2$3%" },
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +stat +(?:"([^"]*)"|([^ ]*))/g, replacement: "$1 %stat.player/$2$3%" },
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +teamstat +(.*)? +(?:"([^"]*)"|([^ ]*))/g, replacement: "$1 \"%stat.team/$2 $3$4%\"" },
-        { regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +randomint +(.*)? +?(.*)?/g, replacement: "$1 \"%random.int/$2 $3%\"" },
-        { regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +var +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.player/$2 $3% $4"},
-        { regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +globalvar +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.global/$2 $3% $4"},
-        { regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +teamvar +([^ ]*)? +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.team/$3 $2 $4% $5"},
+		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +randomint +(.*)? +?(.*)?/g, replacement: "$1 \"%random.int/$2 $3%\"" },
+		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +var +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.player/$2 $3% $4" },
+		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +globalvar +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.global/$2 $3% $4" },
+		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +teamvar +([^ ]*)? +([^ ]*)? *([^ ]*)? ?(.*)?/g, replacement: "$1 %var.team/$3 $2 $4% $5" },
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +health/g, replacement: "$1 %player.health%" },
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +maxHealth/g, replacement: "$1 %player.maxhealth%" },
 		{ regex: /(=|>|<|set|dec|mult|div|ment|inc|multiply|divide|equal|Less Than|Less Than or Equal|Greater Than|Greater Than or Equal) +hunger/g, replacement: "$1 %player.hunger%" },
@@ -169,7 +169,7 @@ function getArgs(input) {
 				inCurlyBrackets = false;
 				// If the argument is in curly brackets
 				shortcuts.forEach((shortcut) => {
-                    arg = arg.replaceAll(new RegExp(`(\\b)${shortcut.name}(\\b)`, "g"), `$1${shortcut.value}$2`);
+					arg = arg.replaceAll(new RegExp(`(\\b)${shortcut.name}(\\b)`, "g"), `$1${shortcut.value}$2`);
 				});
 				try {
 					arg = evaluateExpression(arg);
@@ -196,12 +196,12 @@ function getArgs(input) {
 					return false; // Invalid expression
 				}
 			} else {
-                if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
+				if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
 
-                arg += input[i];
+				arg += input[i];
 			}
 		} else {
-            if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
+			if (input[i] === "\\" && ["\"", "(", "{", "%", "\\"].includes(input[i + 1])) i++;
 
 			arg += input[i];
 		}
@@ -235,7 +235,7 @@ function getArgs(input) {
  * @returns The result of the expression
  */
 function evaluateExpression(expression) {
-    console.log(expression);
+	console.log(expression);
 	let func = new Function('return ' + String(expression).replaceAll("(", "evaluateExpression("));
 	return func().toString().replaceAll("evalExpression(", "(");
 }
@@ -301,27 +301,27 @@ function validOperator(operator) {
 		case "//=":
 			operator = "divide";
 			break;
-        case "&=":
-            operator = "bitwise and";
-            break;
-        case "|=":
-            operator = "bitwise or";
-            break;
-        case "^=":
-            operator = "bitwise xor";
-            break;
-        case "shl":
-        case "<<=":
-            operator = "left shift";
-            break;
-        case "shr":
-        case ">>=":
-            operator = "arithmetic right shift";
-            break;
-        case "lshr":
-        case ">>>=":
-            operator = "logical right shift";
-            break;
+		case "&=":
+			operator = "bitwise and";
+			break;
+		case "|=":
+			operator = "bitwise or";
+			break;
+		case "^=":
+			operator = "bitwise xor";
+			break;
+		case "shl":
+		case "<<=":
+			operator = "left shift";
+			break;
+		case "shr":
+		case ">>=":
+			operator = "arithmetic right shift";
+			break;
+		case "lshr":
+		case ">>>=":
+			operator = "logical right shift";
+			break;
 	}
 	if (!['increment', 'decrement', 'set', 'multiply', 'divide', "unset", "bitwise and", "bitwise or", "bitwise xor", "left shift", "arithmetic right shift", "logical right shift"].includes(operator.toLowerCase())) return `Unknown operator &e${operator}&c on &eline {line}`;
 	return operator.toUpperCase();

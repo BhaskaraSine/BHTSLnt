@@ -29,7 +29,7 @@ export default (fileName) => {
                 let baseDir = `imports/${fileName.substring(0, fileName.lastIndexOf("/") + 1)}`;
                 let originalName = script.items[i].name;
                 let extension = ".json";
-                
+
                 let finalName = originalName;
                 let counter = 1;
 
@@ -123,7 +123,7 @@ function processPage(items, actionList, menuList, condition) {
                                 if (currentValue === "House Spawn Location") actionobj[property] = "house_spawn";
                                 else if (currentValue === "Invokers Location") actionobj[property] = "invokers_location";
                                 else actionobj[property] = `"custom_coordinates" "${currentValue.replaceAll(/(?:,|yaw: |pitch: )/g, "")}"`;
-                            } else actionobj[property] = currentValue 
+                            } else actionobj[property] = currentValue
                         }
                     });
                 }
@@ -162,9 +162,11 @@ function processPage(items, actionList, menuList, condition) {
                             forceOperation({ type: "back" });
                             inAction = true;
                         }
-                        forceOperation({ type: "export_item", func: (item) => {
-                            actionobj[property] = item;
-                        }});
+                        forceOperation({
+                            type: "export_item", func: (item) => {
+                                actionobj[property] = item;
+                            }
+                        });
                         if (condition) {
                             forceOperation({ type: "click", slot: menu[property].slot + 1 });
                         } else {

@@ -44,7 +44,7 @@ const openTrashBin = new Image(javax.imageio.ImageIO.read(new java.io.File(`./co
 const input = new Input(0, 0, 0, 18);
 input.setEnabled(false);
 input.setText('Enter File Name');
-input.mcObject.func_146203_f(1000); 
+input.mcObject.func_146203_f(1000);
 
 let files = [];
 let filteredFiles = [];
@@ -115,15 +115,15 @@ function renderActionGUI(x, y, gui) {
                 else type = Settings.altIcons ? nh_folderIcon : folderIcon;
 
                 let isHoveringRow = (y < topBound + 20 + 20 * (i - page * linesPerPage) && y > topBound + 20 * (i - page * linesPerPage) && x < xBound && x > input.getX());
-                
+
                 if (isHoveringRow) {
                     if (hoveringIndex != i) {
-						World.playSound('random.wood_click', 0.05, 2);
+                        World.playSound('random.wood_click', 0.05, 2);
                         hoveringIndex = i;
                     }
                     hovered = true;
                     Renderer.drawRect(Renderer.color(60, 60, 60, 200), input.getX() - 3, topBound + 2 + 20 * (i - page * linesPerPage), input.getWidth() + 6, 21);
-                    
+
                     if (Settings.showEditButtonInImportMenu && currentFile.endsWith(".htsl")) {
                         let isHoveringPen = (x < xBound - 24 && x > xBound - 40);
                         Renderer.drawImage(isHoveringPen ? hoverEditPen : editPen, xBound - 40, topBound + 4 + 20 * (i - page * linesPerPage), 16, 16);
@@ -145,7 +145,7 @@ function renderActionGUI(x, y, gui) {
                             try {
                                 item = getItemFromNBT(JSON.parse(content).item);
                                 renderItemIcons[pathKey] = item;
-                            } catch(e) {}
+                            } catch (e) { }
                         }
                     }
                 }
@@ -162,10 +162,10 @@ function renderActionGUI(x, y, gui) {
                     }
                 } else Renderer.drawImage(type, drawX, drawY, size, size);
 
-				let displayName = isGlobalSearching ? currentFile : currentFile.replace(subDir, "");
-				let maxTextWidth = input.getWidth() - 35;
+                let displayName = isGlobalSearching ? currentFile : currentFile.replace(subDir, "");
+                let maxTextWidth = input.getWidth() - 35;
 
-				let dotIndex = displayName.lastIndexOf(".");
+                let dotIndex = displayName.lastIndexOf(".");
                 if (!currentFile.endsWith(".htsl") && !currentFile.endsWith(".json")) {
                     dotIndex = -1;
                     displayName = displayName.slice(0, -1) + "&8/&r";
@@ -173,18 +173,18 @@ function renderActionGUI(x, y, gui) {
                 let baseName = dotIndex !== -1 ? displayName.substring(0, dotIndex) : displayName;
                 let extension = dotIndex !== -1 ? "&8." + displayName.substring(dotIndex + 1) : "";
 
-				let currentWidth = Renderer.getStringWidth(displayName);
+                let currentWidth = Renderer.getStringWidth(displayName);
 
-				if (currentWidth > maxTextWidth) {
-					while (Renderer.getStringWidth("..." + baseName + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
-						baseName = baseName.substring(1);
-					}
-					baseName = "&8...&f" + baseName;
-				}
+                if (currentWidth > maxTextWidth) {
+                    while (Renderer.getStringWidth("..." + baseName + (dotIndex !== -1 ? "." + displayName.substring(dotIndex + 1) : "")) > maxTextWidth && baseName.length > 0) {
+                        baseName = baseName.substring(1);
+                    }
+                    baseName = "&8...&f" + baseName;
+                }
 
                 let renderedName = baseName + extension;
-				
-				Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
+
+                Renderer.drawString(renderedName, input.getX() + 21, topBound + 9 + 20 * (i - page * linesPerPage), true);
             }
             if (!hovered) hoveringIndex = -1;
             if (filteredFiles.length == 0) Renderer.drawString("Nothing is here...", input.getX() + 10, topBound + 9, true);
@@ -194,18 +194,18 @@ function renderActionGUI(x, y, gui) {
                 let displayDir = "&7" + subDir.replaceAll("/", "&8/&7");
                 let dirWidth = Renderer.getStringWidth(displayDir);
                 let maxDirWidth = input.getWidth() + 10;
-                
+
                 // Truncate from the left by character
                 if (dirWidth > maxDirWidth) {
                     let truncatedDir = subDir;
-                    
+
                     while (Renderer.getStringWidth("&8...&7" + truncatedDir.replaceAll("/", "&8/&7")) > maxDirWidth && truncatedDir.length > 1) {
                         truncatedDir = truncatedDir.substring(1);
                     }
-                    
+
                     displayDir = "&8...&7" + truncatedDir.replaceAll("/", "&8/&7");
                 }
-                
+
                 Renderer.drawString(displayDir, Math.ceil(chestX / 2 - Renderer.getStringWidth(displayDir) / 2), topBound - 9, false);
             }
 
@@ -219,7 +219,7 @@ function renderActionGUI(x, y, gui) {
                 Renderer.drawRect(Renderer.color(0, 255, 0, 100), exportClick.getX(), exportClick.getY(), exportClick.getWidth(), exportClick.getHeight());
             }
         }
-    } catch (e) {console.log(e)}
+    } catch (e) { console.log(e) }
 
     if (Settings.toggleFileExplorer) {
         toggleShow.setX(input.getX() - 15);
@@ -233,13 +233,13 @@ function renderActionGUI(x, y, gui) {
 }
 
 register('guiRender', (x, y, gui) => {
-	if (Client.currentGui.getClassName() !== "GuiContainerCreative" || !Settings.renderGUIAbovePotionEffects) renderActionGUI(x, y, gui);
+    if (Client.currentGui.getClassName() !== "GuiContainerCreative" || !Settings.renderGUIAbovePotionEffects) renderActionGUI(x, y, gui);
 });
 
 register('postGuiRender', (x, y, gui) => {
     if (Client.currentGui.getClassName() === "GuiContainerCreative" && Settings.renderGUIAbovePotionEffects) renderActionGUI(x, y, gui);
 
-    if (tooltipItemStack !== null){
+    if (tooltipItemStack !== null) {
         displayTooltip.invoke(gui, tooltipItemStack, new java.lang.Integer(Client.getMouseX()), new java.lang.Integer(Client.getMouseY()));
         tooltipItemStack = null;
     }
@@ -250,7 +250,7 @@ register('guiKey', (char, keyCode, gui, event) => {
     input.mcObject.func_146195_b(true);
     if (input.mcObject.func_146206_l()) {
         input.mcObject.func_146201_a(char, keyCode);
-        debouncedReadFiles(); 
+        debouncedReadFiles();
         if (keyCode !== 1) cancel(event);
     }
 });
@@ -264,7 +264,7 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
 
     lastClick = Date.now();
     input.mcObject.func_146192_a(x, y, mouseButton);
-    
+
     if (isButtonHovered(exportClick, x, y)) {
         waitingForExportClick = !waitingForExportClick; // Toggle mode
         World.playSound('random.click', 0.5, 1);
@@ -276,9 +276,9 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
         const slot = Client.currentGui.getSlotUnderMouse();
         if (slot && slot.getItem()) {
             let item = slot.getItem().getNBT().toString().replace(/["]/g, '\\$&');
-            
+
             let baseDir = `./config/ChatTriggers/modules/BHTSL/imports/${Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : ""}${Settings.itemPrefix.length > 1 ? Settings.itemPrefix + "/" : ""}${subDir}${input.getText().replace(/[^\\/]+$/, '')}`;
-            
+
             let originalName = "exported_item";
             if (Settings.useItemNameForExportedItems) {
                 originalName = slot.getItem().getName().replace(/§./g, '').replace(/[/\\?%*:|"<>]/g, '_').replace(/\s+/g, '_').trim() || "unnamed_item";
@@ -286,7 +286,7 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
             if (input.getText() !== "Enter File Name" && input.getText().replace(/^.*[\\/]/, '') !== "") {
                 originalName = input.getText().replace(/^.*[\\/]/, '');
             }
-            
+
             let finalName = originalName;
             let counter = 1;
 
@@ -296,7 +296,7 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
             }
 
             FileLib.write(`${baseDir}${finalName}.json`, `{"item": "${item}"}`, true);
-            
+
             if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
                 waitingForExportClick = false;
             }
@@ -366,7 +366,7 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
                 World.playSound('dig.cloth', 0.75, 1.5);
                 World.playSound('dig.snow', 0.75, 1.5);
                 if (Settings.useExternalEditor) {
-                    let moduleBase = Config.modulesFolder + "/BHTSL/imports/"; 
+                    let moduleBase = Config.modulesFolder + "/BHTSL/imports/";
                     let subDirPath = Settings.saveDirectory ? getSubDir().replace(/\\+/g, "/") : "";
 
                     let fullPath = moduleBase + subDirPath + selected;
@@ -392,8 +392,8 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
             }
             if ((selected.includes(".") || selected.endsWith("/")) && x < input.getX() + input.getWidth() - 4 && x > input.getX() + input.getWidth() - 20) {
                 World.playSound('random.fizz', 0.1, 1);
-				World.playSound('liquid.lavapop', 0.5, 0.5);
-                
+                World.playSound('liquid.lavapop', 0.5, 0.5);
+
                 if (selected.endsWith("/")) {
                     // Delete directory and all contents
                     let dirPath = `./config/ChatTriggers/modules/BHTSL/imports/${selected}`;
@@ -435,7 +435,7 @@ register('guiMouseClick', (x, y, mouseButton, gui, event) => {
 });
 
 register('guiClosed', () => {
-    if (waitingForExportClick){
+    if (waitingForExportClick) {
         waitingForExportClick = false;
         ChatLib.chat("&3[BHTSL] &cExport cancelled.");
     }
@@ -484,9 +484,9 @@ function readFiles(forceRefresh = false) {
         const searchText = input.getText();
         const isSearching = searchText !== "Enter File Name" && searchText !== "";
         isGlobalSearching = Settings.globalSearch && isSearching;
-        
+
         const searchPath = `./config/ChatTriggers/modules/BHTSL/imports/${isGlobalSearching ? "" : subDir}`;
-        
+
         if (lastSearchPath !== searchPath || lastIsGlobalSearching !== isGlobalSearching) {
             files = [];
             // Use cached files
@@ -501,7 +501,7 @@ function readFiles(forceRefresh = false) {
                     cacheTimestamp = now;
                 }
             }
-            
+
             lastRawFiles = rawFiles;
             lastSearchPath = searchPath;
             lastIsGlobalSearching = isGlobalSearching;
@@ -526,7 +526,7 @@ function debouncedReadFiles() {
     if (searchTimeout) {
         clearTimeout(searchTimeout);
     }
-    
+
     // Set timeout to call readFiles after 150ms of inactivity
     searchTimeout = setTimeout(() => {
         readFiles();
@@ -554,19 +554,19 @@ function readDir(path, walk) {
 }
 
 function isInItemGui() {
-	if (Client.currentGui.getClassName() === "GuiContainerCreative") return true;
-	if (Client.currentGui.getClassName() === "GuiEditSign") return false;
-	if (Player.getContainer().getClassName() !== "ContainerChest") return false;
-	if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
-	if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) return false;
-	return true;
+    if (Client.currentGui.getClassName() === "GuiContainerCreative") return true;
+    if (Client.currentGui.getClassName() === "GuiEditSign") return false;
+    if (Player.getContainer().getClassName() !== "ContainerChest") return false;
+    if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
+    if (Player.asPlayerMP().player.field_71075_bZ.field_75098_d === false) return false;
+    return true;
 }
 
 function isInActionGui() {
-	if (Client.currentGui.getClassName() === "GuiEditSign") return false;
-	if (Player.getContainer().getClassName() !== "ContainerChest") return false;
-	if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
-	return false;
+    if (Client.currentGui.getClassName() === "GuiEditSign") return false;
+    if (Player.getContainer().getClassName() !== "ContainerChest") return false;
+    if (Player.getContainer().getName().match(/Edit Actions|Actions: /)) return true;
+    return false;
 }
 
 register('guiOpened', () => {

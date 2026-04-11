@@ -74,7 +74,7 @@ export function loadAction(script, deleteExisting) {
 function importComponent(component, menu, condition) {
     // Go through every setting in the menu
     addOperation({ type: 'setGuiContext', context: component.type });
-    if (condition) menu.inverted = {default_value: false, slot: 9, type: "toggle"};
+    if (condition) menu.inverted = { default_value: false, slot: 9, type: "toggle" };
     for (let key in component) {
         if (["type"].includes(key)) continue;
         if (JSON.stringify(menu[key].default_value).toLowerCase() === JSON.stringify(component[key]).replace("_", " ").toLowerCase()) continue;
@@ -123,9 +123,9 @@ function importComponent(component, menu, condition) {
                 let location = component[key];
                 if (location.type.toLowerCase().replace(/ +/g, "_") == "custom_coordinates") {
                     addOperation({ type: 'click', slot: 13 }); // Click "Custom Coordinates" Button
-                    addOperation({ type: 'input', text: location.coords });    
+                    addOperation({ type: 'input', text: location.coords });
                 } else {
-                    addOperation({ type: 'click', slot: 10 + ["house_spawn_location", "invokers_location", "current_location"].indexOf(location.type.toLowerCase().replace(/ +/g, "_"))})
+                    addOperation({ type: 'click', slot: 10 + ["house_spawn_location", "invokers_location", "current_location"].indexOf(location.type.toLowerCase().replace(/ +/g, "_")) })
                 }
                 break;
             case "subactions":
