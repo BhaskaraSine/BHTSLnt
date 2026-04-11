@@ -81,7 +81,7 @@ function checkContainer(obj, context) {
             }
         }
     }
-    
+
     for (let type in typeCounts) {
         let count = typeCounts[type];
         if (limits[type] && count > limits[type]) {

@@ -1,5 +1,8 @@
-Patch v2.0.4:
+Patch v2.0.5:
 
-- Added support for using the item name for the item file name when using the load action GUI item export button
-- Added command autocomplete for "/bhtsl"
-- Increased the code window size
+- Added an option to prevent Hypixel from deleting items held in the inventory (option)
+- Added item hover tooltip to item files in the load action GUI
+- Added trash option to directories in the load action GUI
+- Fixed timeout due to immediate item deletion
+- Fixed item export button behavior when a directory but no file name is given
+- Fixed requestV2 import on Linux
