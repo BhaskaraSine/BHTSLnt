@@ -3,6 +3,12 @@
  * @const
  */
 export default {
+    COPY: {
+        action_name: "Copy Actions"
+    },
+    PASTE: {
+        action_name: "Paste Actions"
+    },
     CHANGE_VARIABLE: {
         action_name: "Change Variable",
         holder: {
@@ -53,7 +59,18 @@ export default {
             slot: 15,
             default_value: false,
             type: "toggle"
+        },
+        comment: { // For regular vars, the slot is decremented by 1
+            slot: 33,
+            default_value: "Not Set",
+            type: "string_input"
+        },
+        comment_team: { // For team vars, the slot stays the same
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
+        // This should be illegal
     },
     CONDITIONAL: {
         action_name: "Conditional",
@@ -76,6 +93,11 @@ export default {
             slot: 13,
             default_value: [],
             type: "subactions"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SEND_MESSAGE: {
@@ -83,6 +105,11 @@ export default {
         message: {
             slot: 10,
             default_value: "Hello!",
+            type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
             type: "string_input"
         }
     },
@@ -107,6 +134,11 @@ export default {
             slot: 13,
             default_value: null,
             type: "location"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     GIVE_ITEM: {
@@ -130,6 +162,11 @@ export default {
             slot: 13,
             default_value: false,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     TITLE: {
@@ -158,6 +195,11 @@ export default {
             slot: 14,
             default_value: 1,
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     EXIT: {
@@ -174,6 +216,11 @@ export default {
             slot: 11,
             default_value: true,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     KILL: {
@@ -191,6 +238,11 @@ export default {
             slot: 10,
             default_value: "Hello World!",
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     RESET_INVENTORY: {
@@ -205,6 +257,11 @@ export default {
             slot: 10,
             default_value: null,
             type: "item"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     POTION_EFFECT: {
@@ -257,6 +314,11 @@ export default {
             slot: 14,
             default_value: false,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     CLOSE_MENU: {
@@ -276,6 +338,11 @@ export default {
             slot: 10,
             default_value: "None",
             type: "dynamic_option_select"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     PAUSE: {
@@ -283,6 +350,11 @@ export default {
         ticks_to_wait: {
             slot: 10,
             default_value: 20,
+            type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
             type: "string_input"
         }
     },
@@ -322,6 +394,11 @@ export default {
             slot: 11,
             default_value: 1,
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     APPLY_LAYOUT: {
@@ -330,6 +407,11 @@ export default {
             slot: 10,
             default_value: null,
             type: "dynamic_option_select"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     TRIGGER_FUNCTION: {
@@ -343,6 +425,11 @@ export default {
             slot: 11,
             default_value: false,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     USE_HELD_ITEM: {
@@ -354,6 +441,11 @@ export default {
             slot: 10,
             default_value: [],
             type: "subactions"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SET_GAMEMODE: {
@@ -375,6 +467,11 @@ export default {
             slot: 10,
             default_value: null,
             type: "location"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     BAIL_PARKOUR: {
@@ -383,6 +480,11 @@ export default {
             slot: 10,
             default_value: "Failed!",
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     FAIL_PARKOUR: {
@@ -390,6 +492,11 @@ export default {
         reason: {
             slot: 10,
             default_value: "Failed!",
+            type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
             type: "string_input"
         }
     },
@@ -404,6 +511,11 @@ export default {
             slot: 11,
             default_value: false,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SEND_TO_LOBBY: {
@@ -434,6 +546,11 @@ export default {
                 "Duels",
                 "Wool Wars"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     GIVE_EXP_LEVELS: {
@@ -441,6 +558,11 @@ export default {
         levels: {
             slot: 10,
             default_value: 1,
+            type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
             type: "string_input"
         }
     },
@@ -470,6 +592,11 @@ export default {
             slot: 12,
             default_value: true,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     CHANGE_MAX_HEALTH: {
@@ -495,6 +622,11 @@ export default {
             slot: 12,
             default_value: true,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SET_HEALTH: {
@@ -515,6 +647,11 @@ export default {
                 "Multiply",
                 "Divide"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     CHANGE_HEALTH: {
@@ -535,6 +672,11 @@ export default {
                 "Multiply",
                 "Divide"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SET_HUNGER_LEVEL: {
@@ -555,6 +697,11 @@ export default {
                 "Multiply",
                 "Divide"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     CHANGE_HUNGER_LEVEL: {
@@ -575,6 +722,11 @@ export default {
                 "Multiply",
                 "Divide"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     BALANCE_PLAYER_TEAM: {
@@ -627,6 +779,11 @@ export default {
             slot: 19,
             default_value: false,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     CHANGE_VELOCITY: {
@@ -645,6 +802,11 @@ export default {
             slot: 12,
             default_value: 10,
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     LAUNCH_TO_TARGET: {
@@ -658,6 +820,11 @@ export default {
             slot: 11,
             default_value: 2,
             type: "string_input"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SET_PLAYER_WEATHER: {
@@ -670,6 +837,11 @@ export default {
                 "Sunny",
                 "Raining"
             ]
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     SET_PLAYER_TIME: {
@@ -678,6 +850,11 @@ export default {
             slot: 10,
             default_value: null,
             type: "custom_time"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     },
     TOGGLE_NAMETAG_DISPLAY: {
@@ -686,6 +863,11 @@ export default {
             slot: 10,
             default_value: true,
             type: "toggle"
+        },
+        comment: {
+            slot: 32,
+            default_value: "Not Set",
+            type: "string_input"
         }
     }
 }

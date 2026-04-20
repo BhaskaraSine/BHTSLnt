@@ -56,11 +56,17 @@ export function loadAction(script, deleteExisting) {
             addOperation({ type: 'deleteActions' });
         }
         for (let i = 0; i < script[container].actions.length; i++) {
-            addOperation({ type: 'click', slot: 50 }); // click "Add Action" Button
-            addOperation({ type: 'setGuiContext', context: "Add Action" });
-            addOperation({ type: 'option', option: menus[script[container].actions[i].type].action_name });
-            importComponent(script[container].actions[i], menus[script[container].actions[i].type]);
-            addOperation({ type: 'returnToEditActions' });
+            if (script[container].actions[i].type == "COPY") {
+                addOperation({ type: "click", slot: 51, button: 1 }) // Right-click the copy/paste button (copy)
+            } else if (script[container].actions[i].type == "PASTE") {
+                addOperation({ type: "click", slot: 51, button: 0 }) // Left-click the copy/paste button (paste)
+            } else {
+                addOperation({ type: 'click', slot: 50 }); // click "Add Action" Button
+                addOperation({ type: 'setGuiContext', context: "Add Action" });
+                addOperation({ type: 'option', option: menus[script[container].actions[i].type].action_name });
+                importComponent(script[container].actions[i], menus[script[container].actions[i].type]);
+                addOperation({ type: 'returnToEditActions' });
+            }
         }
     }
     addOperation({ type: 'done' });
