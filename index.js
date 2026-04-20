@@ -134,8 +134,9 @@ register("command", ...args => {
     if (command === "installupdate") {
         request("https://api.github.com/repos/BhaskaraSine/BHTSLnt/releases/latest").then(response => {
             const author = JSON.parse(response).author.id;
-            if (author !== 257887200) {
+            if (author !== 277843629) {
                 ChatLib.chat("&3[BHTSL] &cInvalid author id &e" + author);
+                // This seems like a security feature, so I'll keep it in. 277843629 is my ID.
                 return;
             }
 
