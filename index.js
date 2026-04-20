@@ -132,7 +132,7 @@ register("command", ...args => {
         }
     }
     if (command === "installupdate") {
-        request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
+        request("https://api.github.com/repos/BhaskaraSine/BHTSLnt/releases/latest").then(response => {
             const author = JSON.parse(response).author.id;
             if (author !== 257887200) {
                 ChatLib.chat("&3[BHTSL] &cInvalid author id &e" + author);
@@ -143,7 +143,7 @@ register("command", ...args => {
 
             ChatLib.chat("&3[BHTSL] &fDownloading latest update...");
 
-            downloadFile("https://github.com/Builderboy271/BHTSL/releases/latest/download/BHTSL.zip", modulePath + "BHTSL_new/BHTSL.zip");
+            downloadFile("https://api.github.com/repos/BhaskaraSine/BHTSLnt/releases/latest", modulePath + "BHTSL_new/BHTSL.zip");
             const mainDir = new File(modulePath + "BHTSL");
 
             ChatLib.chat("&3[BHTSL] &eDeleting old files...");
@@ -193,7 +193,7 @@ register("command", ...args => {
         return;
     }
     if (command === '_latestchangelog') {
-        request("https://api.github.com/repos/Builderboy271/BHTSL/releases/latest").then(response => {
+        request("https://api.github.com/repos/BhaskaraSine/BHTSLnt/releases/latest").then(response => {
             const changelog = JSON.parse(response).body.split("\n");
 
             ChatLib.chat("&3[BHTSL] &7v&f" + JSON.parse(response).tag_name.replace("v", "") + "&e Changes:");
