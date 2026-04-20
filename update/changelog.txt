@@ -1,6 +1,4 @@
-Patch v2.0.5:
+Patch v1.0.4:
 
-- Look ma, I can add stuff here!
-- Copy/paste
-- Comments
-- God I hate how often I am re-iterating myself
+- Fixed auto-updater for now I hope
+- Actually fixed it I SWEAR TO GOD!

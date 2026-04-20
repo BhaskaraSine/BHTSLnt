@@ -164,7 +164,7 @@ register("command", ...args => {
 
             ChatLib.chat("&3[BHTSL] &dInstalling update...");
 
-            FileLib.unzip(modulePath + "BHTSL_new/BHTSL.zip", modulePath);
+            FileLib.unzip(modulePath + "BHTSL_new/BHTSL.zip", modulePath + "BHTSL/");
             FileLib.deleteDirectory(modulePath + "BHTSL_new");
 
             ChatLib.chat("&3[BHTSL] &bReloading Chattriggers...");
