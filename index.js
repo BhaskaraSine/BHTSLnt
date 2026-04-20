@@ -144,7 +144,7 @@ register("command", ...args => {
 
             ChatLib.chat("&3[BHTSL] &fDownloading latest update...");
 
-            downloadFile("https://api.github.com/repos/BhaskaraSine/BHTSLnt/releases/latest", modulePath + "BHTSL_new/BHTSL.zip");
+            downloadFile("https://github.com/BhaskaraSine/BHTSLnt/releases/latest/download/BHTSL.zip", modulePath + "BHTSL_new/BHTSL.zip");
             const mainDir = new File(modulePath + "BHTSL");
 
             ChatLib.chat("&3[BHTSL] &eDeleting old files...");

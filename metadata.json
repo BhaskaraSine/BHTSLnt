@@ -2,7 +2,7 @@
   "name": "BHTSL",
   "creator": "BusterBrown1218 (Edits by Builderboy271 then by BhaskaraSine)",
   "description": "BHTSL but with some so-called \"improvements\" and changes by BhaskaraSine!",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "entry": "index.js",
   "requires": ["requestV2", "Vigilance"]
 }
