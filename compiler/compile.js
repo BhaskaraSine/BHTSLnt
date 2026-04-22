@@ -553,6 +553,10 @@ export function preProcess(importActions, dissallowedFiles) {
 		if (multilineAction) multilineActionLength++;
 		if (importActions[i] == "") continue;
 		if (importActions[i].startsWith("//")) continue;
+		if (importActions[i].startsWith("# ")) {
+			// Transform comments from '# text' -> '# "text"'
+			importActions[i] = `# "${importActions[i].slice(2, importActions[i].length)}"`
+		}
 		if (importActions[i].startsWith("/*")) { multilineComment = true; continue; }
 		if (importActions[i].endsWith("*/")) {
 			if (multilineComment) { multilineComment = false; continue; }

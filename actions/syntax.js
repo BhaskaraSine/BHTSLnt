@@ -15,6 +15,10 @@
  */
 export default {
     actions: {
+        "#": {
+            type: "COMMENT",
+            full: "# <message>"
+        },
         copy: {
             type: "COPY",
             full: "copy"
@@ -25,11 +29,11 @@ export default {
         },
         applyLayout: {
             type: "APPLY_LAYOUT",
-            full: "applyLayout <layout> <comment>"
+            full: "applyLayout <layout>"
         },
         applyPotion: {
             type: "POTION_EFFECT",
-            full: "applyPotion <effect> <duration> <level> <override_existing_effects> <show_potion_icon> <comment>"
+            full: "applyPotion <effect> <duration> <level> <override_existing_effects> <show_potion_icon>"
         },
         balanceTeam: {
             type: "BALANCE_PLAYER_TEAM",
@@ -41,42 +45,42 @@ export default {
         },
         globalstat: {
             type: "CHANGE_VARIABLE",
-            full: "globalstat <variable> <operation> <value> <comment>",
+            full: "globalstat <variable> <operation> <value>",
             from: "globalstat"
         },
         globalvar: {
             type: "CHANGE_VARIABLE",
-            full: "globalvar <variable> <operation> <value> <automatic_unset> <comment>",
+            full: "globalvar <variable> <operation> <value> <automatic_unset>",
             from: "globalvar"
         },
         changeHealth: {
             type: "SET_HEALTH",
-            full: "changeHealth <mode> <health> <comment>"
+            full: "changeHealth <mode> <health>"
         },
         hungerLevel: {
             type: "SET_HUNGER_LEVEL",
-            full: "hungerLevel <mode> <level> <comment>"
+            full: "hungerLevel <mode> <level>"
         },
         maxHealth: {
             type: "SET_MAX_HEALTH",
-            full: "maxHealth <mode> <max_health> <heal_on_change> <comment>"
+            full: "maxHealth <mode> <max_health> <heal_on_change>"
         },
         changePlayerGroup: {
             type: "CHANGE_PLAYER_GROUP",
-            full: "changePlayerGroup <group> <demotion_protection> <comment>"
+            full: "changePlayerGroup <group> <demotion_protection>"
         },
         changeGroup: {
             type: "CHANGE_PLAYER_GROUP",
-            full: "changeGroup <group> <demotion_protection> <comment>"
+            full: "changeGroup <group> <demotion_protection>"
         },
         stat: {
             type: "CHANGE_VARIABLE",
-            full: "stat <variable> <operation> <value> <comment>",
+            full: "stat <variable> <operation> <value>",
             from: "stat"
         },
         var: {
             type: "CHANGE_VARIABLE",
-            full: "var <variable> <operation> <value> <automatic_unset> <comment>",
+            full: "var <variable> <operation> <value> <automatic_unset>",
             from: "var"
         },
         teamstat: {
@@ -99,19 +103,19 @@ export default {
         },
         actionBar: {
             type: "ACTION_BAR",
-            full: "actionBar <message> <comment>"
+            full: "actionBar <message>"
         },
         displayMenu: {
             type: "DISPLAY_MENU",
-            full: "displayMenu <menu> <comment>"
+            full: "displayMenu <menu>"
         },
         title: {
             type: "TITLE",
-            full: "title <title> <subtitle> <fadein> <stay> <fadeout> <comment>"
+            full: "title <title> <subtitle> <fadein> <stay> <fadeout>"
         },
         enchant: {
             type: "ENCHANT_HELD_ITEM",
-            full: "enchant <enchantment> <level> <comment>"
+            full: "enchant <enchantment> <level>"
         },
         exit: {
             type: "EXIT",
@@ -119,7 +123,7 @@ export default {
         },
         failParkour: {
             type: "BAIL_PARKOUR",
-            full: "failParkour <reason> <comment>"
+            full: "failParkour <reason>"
         },
         fullHeal: {
             type: "FULL_HEAL",
@@ -127,11 +131,11 @@ export default {
         },
         xpLevel: {
             type: "GIVE_EXP_LEVELS",
-            full: "xpLevel <levels> <comment>"
+            full: "xpLevel <levels>"
         },
         giveItem: {
             type: "GIVE_ITEM",
-            full: "giveItem <item> <allow_multiple> <inventory_slot> <replace_existing_item> <comment>"
+            full: "giveItem <item> <allow_multiple> <inventory_slot> <replace_existing_item>"
         },
         houseSpawn: {
             type: "SPAWN",
@@ -147,15 +151,15 @@ export default {
         },
         pause: {
             type: "PAUSE",
-            full: "pause <ticks_to_wait> <comment>"
+            full: "pause <ticks_to_wait>"
         },
         sound: {
             type: "PLAY_SOUND",
-            full: "sound <sound> <volume> <pitch> <location> <comment>"
+            full: "sound <sound> <volume> <pitch> <location>"
         },
         removeItem: {
             type: "REMOVE_ITEM",
-            full: "removeItem <item> <comment>"
+            full: "removeItem <item>"
         },
         resetInventory: {
             type: "RESET_INVENTORY",
@@ -163,31 +167,31 @@ export default {
         },
         chat: {
             type: "SEND_MESSAGE",
-            full: "chat <message> <comment> <comment>"
+            full: "chat <message>"
         },
         lobby: {
             type: "SEND_TO_LOBBY",
-            full: "lobby <location> <comment>"
+            full: "lobby <location>"
         },
         compassTarget: {
             type: "SET_COMPASS_TARGET",
-            full: "compassTarget <location> <comment>"
+            full: "compassTarget <location>"
         },
         gamemode: {
             type: "SET_GAMEMODE",
-            full: "gamemode <gamemode> <comment>"
+            full: "gamemode <gamemode>"
         },
         setTeam: {
             type: "SET_PLAYER_TEAM",
-            full: "setTeam <team> <comment>"
+            full: "setTeam <team>"
         },
         tp: {
             type: "TELEPORT_PLAYER",
-            full: "tp <location> <prevent_teleport_inside_blocks> <comment>"
+            full: "tp <location> <prevent_teleport_inside_blocks>"
         },
         function: {
             type: "TRIGGER_FUNCTION",
-            full: "function <function> <trigger_for_all_players> <comment>"
+            full: "function <function> <trigger_for_all_players>"
         },
         consumeItem: {
             type: "USE_HELD_ITEM",
@@ -195,35 +199,35 @@ export default {
         },
         dropItem: {
             type: "DROP_ITEM",
-            full: "dropItem <item> <location> <drop_naturally> <prevent_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks> <comment>"
+            full: "dropItem <item> <location> <drop_naturally> <prevent_item_merging> <prioritize_player> <fallback_to_inventory> <despawn_duration_ticks> <pickup_delay_ticks>"
         },
         changeVelocity: {
             type: "CHANGE_VELOCITY",
-            full: "changeVelocity <x_direction> <y_direction> <z_direction> <comment>"
+            full: "changeVelocity <x_direction> <y_direction> <z_direction>"
         },
         launchTarget: {
             type: "LAUNCH_TO_TARGET",
-            full: "launchTarget <target_location> <launch_strength> <comment>"
+            full: "launchTarget <target_location> <launch_strength>"
         },
         if: {
             type: "CONDITIONAL",
-            full: "if <match_any_condition> (<conditions>) {\n<if_actions>\n} else {\n<else_actions>\n} {<comment>}"
+            full: "if <match_any_condition> (<conditions>) {\n<if_actions>\n} else {\n<else_actions>\n}"
         },
         random: {
             type: "RANDOM_ACTION",
-            full: "random {\n<actions>\n} {<comment>}"
+            full: "random {\n<actions>\n}"
         },
         playerWeather: {
             type: "SET_PLAYER_WEATHER",
-            full: "playerWeather <weather> <comment>"
+            full: "playerWeather <weather>"
         },
         playerTime: {
             type: "SET_PLAYER_TIME",
-            full: "playerTime <time> <comment>"
+            full: "playerTime <time>"
         },
         displayNametag: {
             type: "TOGGLE_NAMETAG_DISPLAY",
-            full: "displayNametag <display_nametag> <comment>"
+            full: "displayNametag <display_nametag>"
         }
     },
     conditions: {

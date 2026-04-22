@@ -3,6 +3,14 @@
  * @const
  */
 export default {
+    COMMENT: {
+        action_name: "Add Note",
+        message: {
+            slot: 0,
+            default_value: "None",
+            type: "string_input"
+        }
+    },
     COPY: {
         action_name: "Copy Actions"
     },
@@ -60,17 +68,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: { // For regular vars, the slot is decremented by 1
-            slot: 33,
-            default_value: "Not Set",
-            type: "string_input"
-        },
-        comment_team: { // For team vars, the slot stays the same
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
-        // This should be illegal
     },
     CONDITIONAL: {
         action_name: "Conditional",
@@ -94,11 +91,6 @@ export default {
             default_value: [],
             type: "subactions"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SEND_MESSAGE: {
         action_name: "Send a Chat Message",
@@ -107,11 +99,6 @@ export default {
             default_value: "Hello!",
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     PLAY_SOUND: {
         action_name: "Play Sound",
@@ -135,11 +122,6 @@ export default {
             default_value: null,
             type: "location"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     GIVE_ITEM: {
         action_name: "Give Item",
@@ -163,11 +145,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     TITLE: {
         action_name: "Display Title",
@@ -196,11 +173,6 @@ export default {
             default_value: 1,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     EXIT: {
         action_name: "Exit"
@@ -217,11 +189,6 @@ export default {
             default_value: true,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     KILL: {
         action_name: "Kill Player"
@@ -239,11 +206,6 @@ export default {
             default_value: "Hello World!",
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     RESET_INVENTORY: {
         action_name: "Reset Inventory"
@@ -258,11 +220,6 @@ export default {
             default_value: null,
             type: "item"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     POTION_EFFECT: {
         action_name: "Apply Potion Effect",
@@ -315,11 +272,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CLOSE_MENU: {
         action_name: "Close Menu"
@@ -339,11 +291,6 @@ export default {
             default_value: "None",
             type: "dynamic_option_select"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     PAUSE: {
         action_name: "Pause Execution",
@@ -352,11 +299,6 @@ export default {
             default_value: 20,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     ENCHANT_HELD_ITEM: {
         action_name: "Enchant Held Item",
@@ -395,11 +337,6 @@ export default {
             default_value: 1,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     APPLY_LAYOUT: {
         action_name: "Apply Inventory Layout",
@@ -408,11 +345,6 @@ export default {
             default_value: null,
             type: "dynamic_option_select"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     TRIGGER_FUNCTION: {
         action_name: "Trigger Function",
@@ -426,11 +358,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     USE_HELD_ITEM: {
         action_name: "Use/Remove Held Item"
@@ -442,11 +369,6 @@ export default {
             default_value: [],
             type: "subactions"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SET_GAMEMODE: {
         action_name: "Set Gamemode",
@@ -468,11 +390,6 @@ export default {
             default_value: null,
             type: "location"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     BAIL_PARKOUR: {
         action_name: "Fail Parkour",
@@ -481,11 +398,6 @@ export default {
             default_value: "Failed!",
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     FAIL_PARKOUR: {
         action_name: "Fail Parkour",
@@ -494,11 +406,6 @@ export default {
             default_value: "Failed!",
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     TELEPORT_PLAYER: {
         action_name: "Teleport Player",
@@ -512,11 +419,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SEND_TO_LOBBY: {
         action_name: "Send to Lobby",
@@ -547,11 +449,6 @@ export default {
                 "Wool Wars"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     GIVE_EXP_LEVELS: {
         action_name: "Give Experience Levels",
@@ -560,11 +457,6 @@ export default {
             default_value: 1,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CLEAR_EFFECTS: {
         action_name: "Clear All Potion Effects"
@@ -593,11 +485,6 @@ export default {
             default_value: true,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CHANGE_MAX_HEALTH: {
         action_name: "Change Max Health",
@@ -623,11 +510,6 @@ export default {
             default_value: true,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SET_HEALTH: {
         action_name: "Change Health",
@@ -648,11 +530,6 @@ export default {
                 "Divide"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CHANGE_HEALTH: {
         action_name: "Change Health",
@@ -673,11 +550,6 @@ export default {
                 "Divide"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SET_HUNGER_LEVEL: {
         action_name: "Change Hunger Level",
@@ -698,11 +570,6 @@ export default {
                 "Divide"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CHANGE_HUNGER_LEVEL: {
         action_name: "Change Hunger Level",
@@ -723,11 +590,6 @@ export default {
                 "Divide"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     BALANCE_PLAYER_TEAM: {
         action_name: "Balance Player Team"
@@ -780,11 +642,6 @@ export default {
             default_value: false,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     CHANGE_VELOCITY: {
         action_name: "Change Velocity",
@@ -803,11 +660,6 @@ export default {
             default_value: 10,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     LAUNCH_TO_TARGET: {
         action_name: "Launch to Target",
@@ -821,11 +673,6 @@ export default {
             default_value: 2,
             type: "string_input"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SET_PLAYER_WEATHER: {
         action_name: "Set Player Weather",
@@ -838,11 +685,6 @@ export default {
                 "Raining"
             ]
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     SET_PLAYER_TIME: {
         action_name: "Set Player Time",
@@ -851,11 +693,6 @@ export default {
             default_value: null,
             type: "custom_time"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     },
     TOGGLE_NAMETAG_DISPLAY: {
         action_name: "Toggle Nametag Display",
@@ -864,10 +701,5 @@ export default {
             default_value: true,
             type: "toggle"
         },
-        comment: {
-            slot: 32,
-            default_value: "Not Set",
-            type: "string_input"
-        }
     }
 }

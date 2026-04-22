@@ -8,7 +8,7 @@ export function loadAction(script, deleteExisting) {
     if (isWorking()) return false;
     let limits = actionLimits(script);
     if (typeof limits == "object") {
-        ChatLib.chat(`&3[BHTSL] &cScript exceeds &e${limits.actionType}&c action limit in &e${limits.context.type.toLowerCase()} ${limits.context.type.startsWith("DEFAULT") ? "&ccontext" : limits.context.name + " &ccontext"}`);
+        chat(`&3[BHTSL] &cScript exceeds &e${limits.actionType}&c action limit in &e${limits.context.type.toLowerCase()} ${limits.context.type.startsWith("DEFAULT") ? "&ccontext" : limits.context.name + " &ccontext"}`);
         return false;
     }
     for (let container in script) {
@@ -60,6 +60,10 @@ export function loadAction(script, deleteExisting) {
                 addOperation({ type: "click", slot: 51, button: 1 }) // Right-click the copy/paste button (copy)
             } else if (script[container].actions[i].type == "PASTE") {
                 addOperation({ type: "click", slot: 51, button: 0 }) // Left-click the copy/paste button (paste)
+            } else if (script[container].actions[i].type == "COMMENT") {
+                addOperation({ type: 'comment' })
+                addOperation({ type: 'chat', text: script[container].actions[i].message })
+                addOperation({ type: "click", slot: 0, button: 0 }) // Click slot 0 to refresh clicker (very evil)
             } else {
                 addOperation({ type: 'click', slot: 50 }); // click "Add Action" Button
                 addOperation({ type: 'setGuiContext', context: "Add Action" });
@@ -136,10 +140,20 @@ function importComponent(component, menu, condition) {
                 break;
             case "subactions":
                 for (let subaction in component[key]) {
-                    addOperation({ type: 'click', slot: 50 }); // click "Add Action" Button
-                    addOperation({ type: 'option', option: menus[component[key][subaction].type].action_name });
-                    importComponent(component[key][subaction], menus[component[key][subaction].type]);
-                    addOperation({ type: 'returnToEditActions' });
+                    if (component[key][subaction].type == "COPY") {
+                        addOperation({ type: "click", slot: 51, button: 1 }) // Right-click the copy/paste button (copy)
+                    } else if (component[key][subaction].type == "PASTE") {
+                        addOperation({ type: "click", slot: 51, button: 0 }) // Left-click the copy/paste button (paste)
+                    } else if (component[key][subaction].type == "COMMENT") {
+                        addOperation({ type: 'comment' })
+                        addOperation({ type: 'chat', text: component[key][subaction].message })
+                        addOperation({ type: "click", slot: 0, button: 0 }) // Click slot 0 to refresh clicker (very evil)
+                    } else {
+                        addOperation({ type: 'click', slot: 50 }); // click "Add Action" Button
+                        addOperation({ type: 'option', option: menus[component[key][subaction].type].action_name });
+                        importComponent(component[key][subaction], menus[component[key][subaction].type]);
+                        addOperation({ type: 'returnToEditActions' });
+                    }
                 }
                 addOperation({ type: 'back' });
                 break;

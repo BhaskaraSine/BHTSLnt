@@ -1,4 +1,8 @@
-Patch v1.0.4:
+Patch v1.0.5:
 
-- Fixed auto-updater for now I hope
-- Actually fixed it I SWEAR TO GOD!
+- Added a better method of adding comments (Put "# <message>" AFTER the action you want to comment)
+- Fixed a bug preventing copy/paste from working inside conditionals and random actions
+- Created a bug where comments didn't work inside conditionals and random actions
+- Fixed a bug where comments woudln't work inside conditionals and random actions (holy peak)
+
+I might make the importer work for comments at some point, apart from that, idk, have a nice day.
