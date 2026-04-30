@@ -17,9 +17,6 @@ Support the HTSL Discord Server: https://discord.gg/bptauV2BAA \
 Support the Housing Editor Discord Server: https://discord.com/invite/jX53YqUShu
 
 Current Changes to BHTSL:
-- Incredibly messy comment system (e.g: `var "Kills" += 1 false "This is a comment"`)
+- Slightly messy comment system (e.g: `# This is a comment` after a line of code)
 - Copying and Pasting (`copy` and `paste`)
 - A new .vsix file for htsl-plus.
-
-Also note that I am documenting the changes that I have made prior to committing them. This should give
-you a rough idea of the type of experise you can expect from me!
